@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Contracts</title>
+    <!-- Bootstrap CSS or any other styling -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar (if shared across multiple pages) -->
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'contracts'})}"></div>
+
+<main role="main" class="container mt-5">
+    <h2 class="mb-4">List of Contracts</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Client</th>
+            <th>Freelancer</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="contract : ${contracts}">
+            <td th:text="${contract.client.username}">Client</td>
+            <td th:text="${contract.freelancer.username}">Freelancer</td>
+            <td th:text="${contract.status}">Status</td>
+            <td>
+                <a th:href="@{/contracts/{id}(id=${contract.id})}" class="btn btn-info btn-sm">View</a>
+                <a th:href="@{/contracts/edit/{id}(id=${contract.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <form th:action="@{/contracts/delete/{id}(id=${contract.id})}" method="post" class="d-inline">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/contracts/create}" class="btn btn-primary">Create New Contract</a>
+</main>
+
+<!-- Bootstrap JS or any other required scripts -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

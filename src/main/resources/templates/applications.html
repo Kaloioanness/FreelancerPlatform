@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Job Applications</title>
+    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Job Applications</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Freelancer</th>
+            <th>Cover Letter</th>
+            <th>Status</th>
+            <th>Applied On</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="apply : ${applications}">
+            <td th:text="${apply.freelancerId}">Freelancer Name</td>
+            <td th:text="${apply.coverLetter}">Cover Letter</td>
+            <td th:text="${apply.status}">Status</td>
+            <td th:text="${apply.createdOn}">Applied On</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/static/js/bootstrap.min.js}"></script>
+</body>
+</html>

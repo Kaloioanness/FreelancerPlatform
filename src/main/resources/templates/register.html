@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/images/19.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-group label {
+            color: #ccc;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .error-message {
+            color: #dc3545;
+        }
+        .password-match-error {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'register'})}"></div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="mb-4 text-center">User Registration</h2>
+            <form id="registrationForm" th:method="post"
+                  th:action="@{/users/register}"
+                  th:object="${registerDTO}" novalidate>
+                <div class="form-group">
+                    <label th:for="username">Username</label>
+                    <input th:field="*{username}"
+                           type="text"
+                           id="username"
+                           name="username"
+                           class="form-control"
+                           placeholder="Username" required>
+
+                    <div class="invalid-feedback">
+                        Please enter a username.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="firstName">First name</label>
+                    <input th:field="*{firstName}"
+                           type="text"
+                           class="form-control"
+                           placeholder="First name" required>
+                    <div class="invalid-feedback">
+                        Please enter a first name.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="lastName">Last name</label>
+                    <input th:field="*{lastName}"
+                           type="text"
+                           id="lastName"
+                           name="lastName"
+                           class="form-control"
+                           placeholder="Last name" required>
+                    <div class="invalid-feedback">
+                        Please enter a last name.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="email">Email</label>
+                    <input  th:field="*{email}"
+                            type="email"
+                            class="form-control"
+                            placeholder="Email" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="password">Password</label>
+                    <input  th:field="*{password}"
+                            type="password"
+                            class="form-control"
+                            placeholder="Password" required>
+                    <div class="invalid-feedback">
+                        Please enter a password.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="confirmPassword">Confirm Password</label>
+                    <input  th:field="*{confirmPassword}"
+                            type="password"
+                            class="form-control"
+                            placeholder="Confirm Password" required>
+                    <div class="invalid-feedback">
+                        Please confirm your password.
+                    </div>
+                    <div class="password-match-error error-message">
+                        Passwords do not match.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label th:for="role">Role:</label>
+                    <select th:field="*{role}"
+                            id="role"
+                            class="form-control">
+                        <option value="FREELANCER">Freelancer</option>
+                        <option value="CLIENT">Client</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS bundle with Popper -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.js"></script>
+<script src="/js/bootstrap.esm.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script>
+    // Custom client-side validation using vanilla JavaScript
+    document.addEventListener('DOMContentLoaded', function () {
+        const registrationForm = document.getElementById('registrationForm');
+
+        registrationForm.addEventListener('submit', function (event) {
+            if (!registrationForm.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            // Check if passwords match
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const passwordMatchError = document.querySelector('.password-match-error');
+            if (password !== confirmPassword) {
+                passwordMatchError.classList.remove('d-none');
+                event.preventDefault();
+            } else {
+                passwordMatchError.classList.add('d-none');
+            }
+
+            registrationForm.classList.add('was-validated');
+        });
+
+        // Reset validation on input change
+        registrationForm.addEventListener('input', function () {
+            const passwordMatchError = document.querySelector('.password-match-error');
+            passwordMatchError.classList.add('d-none');
+
+            registrationForm.classList.remove('was-validated');
+        });
+    });
+</script>
+</body>
+</html>

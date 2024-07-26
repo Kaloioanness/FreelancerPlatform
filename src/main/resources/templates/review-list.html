@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review List</title>
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container mt-4">
+    <h2 class="mb-4">Review List</h2>
+
+    <!-- List of Reviews -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Reviewer</th>
+                    <th>Reviewee</th>
+                    <th>Job Listing</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Loop through reviews using Thymeleaf -->
+                <tr th:each="review : ${reviews}">
+                    <td th:text="${review.id}">1</td>
+                    <td th:text="${review.rating}">5</td>
+                    <td th:text="${review.comment}">Excellent work!</td>
+                    <td th:text="${review.reviewer}">John Doe</td>
+                    <td th:text="${review.reviewee}">Jane Smith</td>
+                    <td th:text="${review.jobListing}">Project XYZ</td>
+                    <td>
+                        <a th:href="@{/api/reviews/{id}(id=${review.id})}" class="btn btn-sm btn-info mr-2">View</a>
+                        <a th:href="@{/api/reviews/{id}/edit(id=${review.id})}" class="btn btn-sm btn-warning mr-2">Edit</a>
+                        <a th:href="@{/api/reviews/{id}(id=${review.id})}" th:method="delete" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Create Review Form with Thymeleaf and Validation -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Create Review</h5>
+            <!-- Form with Thymeleaf validation attributes -->
+            <form th:action="@{/api/reviews}" method="post" th:object="${reviewDTO}">
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" th:field="*{rating}" required>
+                    <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3" th:field="*{comment}" required></textarea>
+                    <span th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="reviewer">Reviewer:</label>
+                    <input type="text" class="form-control" id="reviewer" name="reviewer" th:field="*{reviewer}" required>
+                    <span th:if="${#fields.hasErrors('reviewer')}" th:errors="*{reviewer}" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="reviewee">Reviewee:</label>
+                    <input type="text" class="form-control" id="reviewee" name="reviewee" th:field="*{reviewee}" required>
+                    <span th:if="${#fields.hasErrors('reviewee')}" th:errors="*{reviewee}" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label for="jobListing">Job Listing:</label>
+                    <input type="text" class="form-control" id="jobListing" name="jobListing" th:field="*{jobListing}" required>
+                    <span th:if="${#fields.hasErrors('jobListing')}" th:errors="*{jobListing}" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

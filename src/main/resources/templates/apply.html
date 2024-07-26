@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Apply for Job</title>
+    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Apply for Job</h2>
+    <form th:action="@{/applications/apply}" th:object="${applicationDTO}" method="post">
+        <input type="hidden" th:field="*{jobListingId}">
+        <div class="form-group">
+            <label for="coverLetter">Cover Letter:</label>
+            <textarea id="coverLetter" th:field="*{coverLetter}" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+</div>
+<script th:src="@{/static/js/bootstrap.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+package softuni.bg.service.impl;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import softuni.bg.model.dtos.ApplicationDTO;
+import softuni.bg.model.entity.Application;
+import softuni.bg.model.entity.JobListing;
+import softuni.bg.model.entity.UserEntity;
+import softuni.bg.repository.ApplicationRepository;
+import softuni.bg.repository.JobListingRepository;
+import softuni.bg.repository.UserRepository;
+import softuni.bg.service.ApplicationService;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ApplicationServiceImpl implements ApplicationService {
+
+    private final ApplicationRepository applicationRepository;
+    private final JobListingRepository jobListingRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+
+    public ApplicationServiceImpl(ApplicationRepository applicationRepository, JobListingRepository jobListingRepository, UserRepository userRepository, ModelMapper modelMapper) {
+        this.applicationRepository = applicationRepository;
+        this.jobListingRepository = jobListingRepository;
+        this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public void applyForJob(ApplicationDTO applicationDTO) {
+        Application application = modelMapper.map(applicationDTO, Application.class);
+        JobListing jobListing = jobListingRepository.findById(applicationDTO.getJobListingId())
+                .orElseThrow(() -> new RuntimeException("Job listing not found"));
+        UserEntity freelancer = userRepository.findById(applicationDTO.getFreelancerId())
+                .orElseThrow(() -> new RuntimeException("Freelancer not found"));
+        application.setJobListing(jobListing);
+        application.setFreelancer(freelancer);
+        application.setStatus("Pending");
+        applicationRepository.save(application);
+    }
+
+    @Override
+    public List<ApplicationDTO> getApplicationsForJob(Long jobListingId) {
+        return applicationRepository.findByJobListingId(jobListingId).stream()
+                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApplicationDTO> getApplicationsByFreelancer(Long freelancerId) {
+        return applicationRepository.findByFreelancerId(freelancerId).stream()
+                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .collect(Collectors.toList());
+    }
+}
+
+
+
+

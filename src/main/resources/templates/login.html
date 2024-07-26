@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - Freelancer Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('/images/login.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+        .header h1 {
+            margin: 10px 0;
+            font-size: 24px;
+        }
+        .header p {
+            margin: 0;
+            color: #888;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            text-align: left;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        form input {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        form button {
+            padding: 10px;
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        form button:hover {
+            background: #0056b3;
+        }
+        .links {
+            margin-top: 20px;
+        }
+        .links a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="header">
+        <img th:src="@{/images/SoftUni.png}" alt="Logo">
+        <h1>Welcome, Freelancer</h1>
+        <p>Please login to your account</p>
+    </div>
+    <form th:action="@{/users/login}" th:method="POST">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Login</button>
+    </form>
+    <div class="links">
+        <p>Don't have an account? <a th:href="@{/users/register}">Register</a></p>
+        <p><a th:href="@{/}">Back to Home</a></p>
+    </div>
+</div>
+</body>
+</html>

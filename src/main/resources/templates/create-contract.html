@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Contract</title>
+    <!-- Bootstrap CSS or any other styling -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar (if shared across multiple pages) -->
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'contracts'})}"></div>
+
+<main role="main" class="container mt-5">
+    <h2 class="mb-4">Create New Contract</h2>
+    <form th:action="@{/contracts/create}" method="post" th:object="${contractDTO}">
+        <div class="form-group">
+            <label for="client">Client:</label>
+            <!-- Replace with proper input fields based on your ContractDTO -->
+            <input type="text" class="form-control" id="client" name="client" th:field="*{client}">
+        </div>
+        <div class="form-group">
+            <label for="freelancer">Freelancer:</label>
+            <input type="text" class="form-control" id="freelancer" name="freelancer" th:field="*{freelancer}">
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <input type="text" class="form-control" id="status" name="status" th:field="*{status}">
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</main>
+
+<!-- Bootstrap JS or any other required scripts -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
