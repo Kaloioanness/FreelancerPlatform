@@ -86,17 +86,21 @@
         <p>Please login to your account</p>
     </div>
     <form th:action="@{/users/login}" th:method="POST">
-        <label for="username">Username</label>
+        <label for="username"
+                th:text="#{login_username}"
+        >Username</label>
         <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
-        <label for="password">Password</label>
+        <label for="password"
+                th:text="#{login_password}"
+        >Password</label>
         <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
-        <button type="submit">Login</button>
+        <button type="submit" th:text="#{nav_bar_login}">Login</button>
     </form>
     <div class="links">
-        <p>Don't have an account? <a th:href="@{/users/register}">Register</a></p>
-        <p><a th:href="@{/}">Back to Home</a></p>
+        <a th:utext="#{login_dont_have_acc}" th:href="@{/users/register}" >Register</a></p>
+        <p><a th:href="@{/}" th:text="#{login_back_to_home}"></a></p>
     </div>
 </div>
 </body>

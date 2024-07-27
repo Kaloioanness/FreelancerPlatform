@@ -35,6 +35,7 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="/"
                            th:classappend="${activeLink == 'home'}? 'active'"
+                           th:text="#{nav_bar_home}"
                         >Home </a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
@@ -56,14 +57,11 @@
                            th:classappend="${activeLink == 'reviews'}? 'active'">Reviews</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <div class="form-inline my-2 my-lg-0 border px-3">
-                            <div class="logged-user"
-                                 ></div>
+                        <div class="form-inline my-0 my-lg-0 border px-0">
+                            <div class="logged-user"></div>
                             <form th:method="post"
-                                  th:text="#{nav_bar_logout}"
-                                  th:action="@{/users/logout}"
-                            >Logout
-                                <input class="btn btn-link" type="submit" value="Logout"/>
+                                  th:action="@{/users/logout}">
+                                <input class="btn btn-link" type="submit" th:value="#{nav_bar_logout}"/>
                             </form>
                         </div>
                     </li>
