@@ -24,7 +24,7 @@ public class SecurityConfiguration {
                                        // All static resources to "common locations" (css, images, js)
                                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                        // some more resources for all users
-                                       .requestMatchers("/","/users/login","/users/register","/home").permitAll()
+                                       .requestMatchers("/","/users/login","/users/register","/home", "/error").permitAll()
                                        // all other resources should be authenticated
                                        .anyRequest()
                                        .authenticated()
@@ -37,10 +37,10 @@ public class SecurityConfiguration {
                                 .usernameParameter("username")
                                 // what is the name of the password parameter in the Login POST request?
                                 .passwordParameter("password")
-                                // what will happen if the login is successful
+                                // What will happen if the login is successful
                                 .defaultSuccessUrl("/", true)
-                                // what will happen if the login fails
-                                .failureForwardUrl("/users/login")
+                                // What will happen if the login fails
+                                .failureForwardUrl("/users/login-error")
                 )
                 .logout(
                         logout ->
@@ -51,11 +51,8 @@ public class SecurityConfiguration {
                                         .logoutSuccessUrl("/")
                                         // Invalidate the session after logout
                                         .invalidateHttpSession(true)
-
                 )
-
                 .build();
-
     }
 
     @Bean
@@ -63,9 +60,8 @@ public class SecurityConfiguration {
         return Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     }
 
-
-//    @Bean
-//    public UserDetailsServiceImpl userDetailsService(UserRepository userRepository){
-//        return new UserDetailsServiceImpl(userRepository);
-//    }
+    @Bean
+    public UserDetailsServiceImpl userDetailsService(UserRepository userRepository){
+        return new UserDetailsServiceImpl(userRepository);
+    }
 }
