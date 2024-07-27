@@ -1,9 +1,12 @@
 package softuni.bg.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import softuni.bg.model.FreelanceUserDetails;
 import softuni.bg.model.dtos.*;
 import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
@@ -71,13 +74,6 @@ public class UserService {
         }
         UserEntity userEntity = modelMapper.map(userRegistrationDTO, UserEntity.class);
         userEntity.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
-        if (userRepository.count() == 0){
-            Optional<Role> byName = this.roleRepository.findByName(RoleName.ADMIN);
-            if (byName.isEmpty()){
-                return;
-            }
-            userEntity.getRoles().add(byName.get());
-        }
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         userEntity.getRoles().add(role);
@@ -141,10 +137,16 @@ public class UserService {
         if (userOptional.isPresent()) {
             return modelMapper.map(userOptional.get(), UserDTO.class);
         } else {
-            // Log the error
-            //System.err.println("User not found with email: " + email);
-
-            throw new RuntimeException("User not found with username: " + username);
+                   throw new RuntimeException("User not found with username: " + username);
         }
+    }
+
+    public Optional<FreelanceUserDetails> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null &&
+                authentication.getPrincipal() instanceof FreelanceUserDetails freelanceUserDetails) {
+            return Optional.of(freelanceUserDetails);
+        }
+        return Optional.empty();
     }
 }

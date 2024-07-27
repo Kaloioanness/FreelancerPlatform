@@ -15,7 +15,6 @@ import softuni.bg.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -34,8 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static UserDetails map(UserEntity userEntity) {
 
         return new FreelanceUserDetails(
+                userEntity.getId(),
                 userEntity.getUsername(),
-                userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getRoles().stream().map(Role::getName).map(UserDetailsServiceImpl::map).toList(),
                 userEntity.getFirstName(),

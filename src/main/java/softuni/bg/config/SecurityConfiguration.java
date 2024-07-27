@@ -64,8 +64,8 @@ public class SecurityConfiguration {
     }
 
 
-    @Bean
-    public UserDetailsServiceImpl userDetailsService(UserRepository userRepository){
-        return new UserDetailsServiceImpl(userRepository);
-    }
+//    @Bean
+//    public UserDetailsServiceImpl userDetailsService(UserRepository userRepository){
+//        return new UserDetailsServiceImpl(userRepository);
+//    }
 }
