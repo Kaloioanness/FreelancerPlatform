@@ -57,17 +57,17 @@
 <!-- Main content -->
 
 <div class="container">
-    <h2>Job Listings</h2>
-    <a th:href="@{/job-listings/create}" class="btn btn-success mb-3">Create Job Listing</a>
+    <h2 th:text="#{nav_bar_job_listings}"></h2>
+    <a th:href="@{/job-listings/create}" class="btn btn-success mb-3" th:text="#{create_job_listing}"></a>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Budget</th>
-            <th>Skills Required</th>
-            <th>Date Posted</th>
-            <th>Actions</th>
+            <th th:text="#{job_title}"></th>
+            <th th:text="#{description}"></th>
+            <th th:text="#{budget}"></th>
+            <th th:text="#{skills_required}"></th>
+            <th th:text="#{date_posted}"></th>
+            <th th:text="#{job_actions}"></th>
         </tr>
         </thead>
         <tbody>
@@ -78,9 +78,9 @@
             <td th:text="${job.skillsRequired}">Skills Required</td>
             <td th:text="${job.datePosted}">Date Posted</td>
             <td>
-                <a th:href="@{/applications/apply/{id}(id=${job.id})}" class="btn btn-primary">Apply</a>
-                <a th:href="@{/job-listings/edit/{id}(id=${job.id})}" class="btn btn-secondary">Edit</a>
-                <a th:href="@{/job-listings/delete/{id}(id=${job.id})}" class="btn btn-danger">Delete</a>
+                <a th:href="@{/applications/apply/{id}(id=${job.id})}" class="btn btn-primary" th:text="#{job_apply}"></a>
+                <a th:href="@{/job-listings/edit/{id}(id=${job.id})}" class="btn btn-secondary" th:text="#{job_edit}"></a>
+                <a th:href="@{/job-listings/delete/{id}(id=${job.id})}" class="btn btn-danger" th:text="#{job_delete}"></a>
             </td>
         </tr>
         </tbody>
