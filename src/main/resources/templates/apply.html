@@ -1,20 +1,74 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for Job</title>
     <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-title {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h2>Apply for Job</h2>
-    <form th:action="@{/applications/apply}" th:object="${applicationDTO}" method="post">
-        <input type="hidden" th:field="*{jobListingId}">
-        <div class="form-group">
-            <label for="coverLetter">Cover Letter:</label>
-            <textarea id="coverLetter" th:field="*{coverLetter}" class="form-control" rows="5" required></textarea>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-container">
+                <h2 class="form-title">Apply for Job</h2>
+                <form th:action="@{/applications/apply}" th:object="${applicationDTO}" method="post">
+                    <!-- Hidden field for job listing ID -->
+                    <input type="hidden" th:field="*{jobListingId}">
+
+<!--                    &lt;!&ndash; Applicant Name &ndash;&gt;-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="applicantName">Name:</label>-->
+<!--                        <input type="text" id="applicantName" th:field="*{applicantName}" class="form-control" placeholder="Enter your full name" required>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Applicant Email &ndash;&gt;-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="applicantEmail">Email:</label>-->
+<!--                        <input type="email" id="applicantEmail" th:field="*{applicantEmail}" class="form-control" placeholder="Enter your email address" required>-->
+<!--                    </div>-->
+
+                    <!-- Cover Letter -->
+                    <div class="form-group">
+                        <label for="coverLetter">Cover Letter:</label>
+                        <textarea id="coverLetter" th:field="*{coverLetter}" class="form-control" rows="5" placeholder="Write your cover letter here" required></textarea>
+                    </div>
+
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-block">Apply Now</button>
+                </form>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Apply</button>
-    </form>
+    </div>
 </div>
 <script th:src="@{/static/js/bootstrap.min.js}"></script>
 </body>

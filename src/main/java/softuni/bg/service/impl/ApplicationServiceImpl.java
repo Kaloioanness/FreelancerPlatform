@@ -11,6 +11,7 @@ import softuni.bg.repository.JobListingRepository;
 import softuni.bg.repository.UserRepository;
 import softuni.bg.service.ApplicationService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,12 +33,15 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public void applyForJob(ApplicationDTO applicationDTO) {
         Application application = modelMapper.map(applicationDTO, Application.class);
+
         JobListing jobListing = jobListingRepository.findById(applicationDTO.getJobListingId())
                 .orElseThrow(() -> new RuntimeException("Job listing not found"));
         UserEntity freelancer = userRepository.findById(applicationDTO.getFreelancerId())
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
+
         application.setJobListing(jobListing);
         application.setFreelancer(freelancer);
+        application.setCreatedOn(LocalDateTime.now());
         application.setStatus("Pending");
         applicationRepository.save(application);
     }

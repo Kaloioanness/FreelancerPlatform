@@ -18,7 +18,7 @@
         </thead>
         <tbody>
         <tr th:each="apply : ${applications}">
-            <td th:text="${apply.jobListingId}">Job Title</td>
+            <td th:text="${apply}">Job Title</td>
             <td th:text="${apply.coverLetter}">Cover Letter</td>
             <td th:text="${apply.status}">Status</td>
             <td th:text="${apply.createdOn}">Applied On</td>
