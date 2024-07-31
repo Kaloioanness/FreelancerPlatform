@@ -1,6 +1,7 @@
 package softuni.bg.service;
 
 import softuni.bg.model.dtos.JobListingDTO;
+import softuni.bg.model.dtos.JobListingInfoDTO;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
 
@@ -11,7 +12,7 @@ public interface JobListingService {
     JobListingDTO createJobListing(JobListingDTO jobListingDTO);
     JobListingDTO updateJobListing(Long id, JobListingDTO jobListingDTO);
     JobListingDTO getJobListingById(Long id);
-    List<JobListingDTO> getAllJobListings();
+    List<JobListingInfoDTO> getAllJobListings();
     void deleteJobListing(Long id);
     UserEntity getCurrentUser(String Invalid_client_ID);
     String getCurrentUsername();

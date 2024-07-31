@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ApplicationDTO;
+import softuni.bg.model.dtos.ApplicationInfoDTO;
 import softuni.bg.service.ApplicationService;
 import softuni.bg.service.JobListingService;
 import softuni.bg.service.UserService;
@@ -55,9 +56,9 @@ public class ApplicationController {
     @GetMapping("/freelancer")
     public String getApplicationsByFreelancer(Principal principal, Model model) {
         Long freelancerId = userService.findUserByUsername(principal.getName()).getId();
-        List<ApplicationDTO> applications = applicationService.getApplicationsByFreelancer(freelancerId);
+        List<ApplicationInfoDTO> applications = applicationService.getApplicationsByFreelancer(freelancerId);
         model.addAttribute("applications", applications);
-//        this.jobListingService.getJobListingById(applications.getFirst().getJobListingId());
+//        jobListingService.getJobListingById(applications.getFirst().getJobListingId());
         return "freelancer-applications";
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.JobListingDTO;
+import softuni.bg.model.dtos.JobListingInfoDTO;
 import softuni.bg.model.dtos.UserDTO;
 import softuni.bg.service.JobListingService;
 import softuni.bg.service.UserService;
@@ -24,7 +25,7 @@ public class JobListingController {
 
     @GetMapping
     public String getAllJobListings(Model model) {
-        List<JobListingDTO> jobListings = jobListingService.getAllJobListings();
+        List<JobListingInfoDTO> jobListings = jobListingService.getAllJobListings();
         model.addAttribute("jobListings", jobListings);
         return "job-listings";
     }

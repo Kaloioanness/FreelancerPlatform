@@ -3,6 +3,7 @@ package softuni.bg.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.ApplicationDTO;
+import softuni.bg.model.dtos.ApplicationInfoDTO;
 import softuni.bg.model.entity.Application;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
@@ -54,9 +55,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<ApplicationDTO> getApplicationsByFreelancer(Long freelancerId) {
+    public List<ApplicationInfoDTO> getApplicationsByFreelancer(Long freelancerId) {
         return applicationRepository.findByFreelancerId(freelancerId).stream()
-                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .map(application -> modelMapper.map(application, ApplicationInfoDTO.class))
                 .collect(Collectors.toList());
     }
 }

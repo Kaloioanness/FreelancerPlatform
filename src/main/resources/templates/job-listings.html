@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,6 +68,7 @@
             <th th:text="#{budget}"></th>
             <th th:text="#{skills_required}"></th>
             <th th:text="#{date_posted}"></th>
+            <th>Job posted by</th>
             <th th:text="#{job_actions}"></th>
         </tr>
         </thead>
@@ -76,7 +78,8 @@
             <td th:text="${job.description}">Job Description</td>
             <td th:text="${job.budget}">Budget</td>
             <td th:text="${job.skillsRequired}">Skills Required</td>
-            <td th:text="${job.datePosted}">Date Posted</td>
+            <td th:text="${job.datePosted.toLocalDate()}">Date Posted</td>
+            <td th:text="${job.client.getUsername()}">Job posted by</td>
             <td>
                 <a th:href="@{/applications/apply/{id}(id=${job.id})}" class="btn btn-primary" th:text="#{job_apply}"></a>
                 <a th:href="@{/job-listings/edit/{id}(id=${job.id})}" class="btn btn-secondary" th:text="#{job_edit}"></a>

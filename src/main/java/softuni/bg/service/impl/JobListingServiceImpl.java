@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.JobListingDTO;
+import softuni.bg.model.dtos.JobListingInfoDTO;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
 import softuni.bg.repository.JobListingRepository;
@@ -62,9 +63,9 @@ public class JobListingServiceImpl implements JobListingService {
     }
 
     @Override
-    public List<JobListingDTO> getAllJobListings() {
+    public List<JobListingInfoDTO> getAllJobListings() {
         return jobListingRepository.findAll().stream()
-                .map(jobListing -> modelMapper.map(jobListing, JobListingDTO.class))
+                .map(jobListing -> modelMapper.map(jobListing, JobListingInfoDTO.class))
                 .collect(Collectors.toList());
     }
 
