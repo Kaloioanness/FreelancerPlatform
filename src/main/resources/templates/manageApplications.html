@@ -52,10 +52,10 @@
                 </thead>
                 <tbody>
                 <!-- Loop through applications -->
-                <tr th:each="application : ${applications}">
-                    <td th:text="${application.jobListing.title}">Job Listing</td>
-                    <td th:text="${application.freelancer.username}">Freelancer</td>
-                    <td th:text="${application.status}">Status</td>
+                <tr th:each="apply : ${}">
+                    <td th:text="${apply.}">Job Listing</td>
+                    <td th:text="${apply.freelancer.username}">Freelancer</td>
+                    <td th:text="${apply.status}">Status</td>
                     <td>
                         <a th:href="@{/api/applications/{id}(id=${application.id})}" class="btn btn-sm btn-info btn-action">View</a>
                         <a th:href="@{/api/applications/{id}/edit(id=${application.id})}" class="btn btn-sm btn-warning btn-action">Edit</a>

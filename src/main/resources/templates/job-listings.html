@@ -5,8 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Listings</title>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom styles -->
     <style>
         body {
@@ -14,40 +25,80 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            font-family: 'Nunito', 'Rubik', sans-serif;
             color: #fff;
-            font-family: Arial, sans-serif;
-            padding-top: 5rem;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
             max-width: 900px;
             margin: 20px auto;
-            background-color: rgba(0, 0, 0, 0.75);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffc107;
+            font-weight: bold;
+            font-size: 2.5rem;
         }
 
         .card {
-            margin-top: 20px;
+            background-color: rgba(200, 255, 255, 0.1);
             border: none;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .card-header {
-            background-color: #007bff;
-            color: #fff;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card h5 {
+            color: #ffc107;
             font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
         }
 
-        .btn-action {
+        .card p {
+            font-size: 1rem;
+            color: #24c773;
+            margin-bottom: 10px;
+        }
+
+        .card .btn-primary {
+            background-color: #ffc107;
+            border: none;
+            color: #333;
+            font-weight: bold;
             margin-right: 10px;
         }
 
-        .form-error {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 4px;
+        .card .btn-primary:hover {
+            background-color: #e0a800;
+        }
+
+        .text-end .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+
+        .text-end .btn-success:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -56,40 +107,24 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'jobListings'})}"></div>
 
 <!-- Main content -->
-
 <div class="container">
-    <h2 th:text="#{nav_bar_job_listings}"></h2>
-    <a th:href="@{/job-listings/create}" class="btn btn-success mb-3" th:text="#{create_job_listing}"></a>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th th:text="#{job_title}"></th>
-            <th th:text="#{description}"></th>
-            <th th:text="#{budget}"></th>
-            <th th:text="#{skills_required}"></th>
-            <th th:text="#{date_posted}"></th>
-            <th>Job posted by</th>
-            <th th:text="#{job_actions}"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="job : ${jobListings}">
-            <td th:text="${job.title}">Job Title</td>
-            <td th:text="${job.description}">Job Description</td>
-            <td th:text="${job.budget}">Budget</td>
-            <td th:text="${job.skillsRequired}">Skills Required</td>
-            <td th:text="${job.datePosted.toLocalDate()}">Date Posted</td>
-            <td th:text="${job.client.getUsername()}">Job posted by</td>
-            <td>
-                <a th:href="@{/applications/apply/{id}(id=${job.id})}" class="btn btn-primary" th:text="#{job_apply}"></a>
-                <a th:href="@{/job-listings/edit/{id}(id=${job.id})}" class="btn btn-secondary" th:text="#{job_edit}"></a>
-                <a th:href="@{/job-listings/delete/{id}(id=${job.id})}" class="btn btn-danger" th:text="#{job_delete}"></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <h2 th:text="#{nav_bar_job_listings}">Job Listings</h2>
+    <div class="text-end mb-4">
+        <a th:href="@{/job-listings/create}" class="btn btn-success" th:text="#{create_job_listing}">Create Job Listing</a>
+    </div>
+    <div class="card" th:each="job : ${jobListings}">
+        <div class="card-body">
+            <h5 th:text="${job.title}">Job Title</h5>
+            <p><strong>Budget:</strong> <span th:text="${job.budget}">$1000</span></p>
+            <p><strong>Skills Required:</strong> <span th:text="${job.skillsRequired}">Java, MySQL, etc.</span></p>
+            <p><strong>Date Posted:</strong> <span th:text="${job.datePosted.getMonth()}">2024-07-29</span></p>
+            <a th:href="@{/applications/apply/{id}(id=${job.id})}" class="btn btn-primary" th:text="#{job_apply}">Apply</a>
+            <a th:href="@{/job-listings/details/{id}(id=${job.id})}" class="btn btn-primary">Details</a>
+        </div>
+    </div>
 </div>
+
 <!-- Bootstrap JS -->
-<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

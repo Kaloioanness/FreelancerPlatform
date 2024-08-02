@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freelancer Platform - Home</title>
-    <!-- Bootstrap CSS -->
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="/lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles -->
+
+    <!-- Template Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+
     <style>
-        /* Ensure the body and html take up the full height of the viewport */
+        /* Full height layout and default styles */
         html, body {
             height: 100%;
             margin: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Nunito', 'Rubik', sans-serif;
+            background-color: #f8f9fa;
         }
 
         /* Flexbox layout for the main container */
@@ -25,67 +43,105 @@
         /* Main content area should take up the remaining space */
         main {
             flex: 1;
-
         }
 
-        /* Body styles */
+        /* Background and styling for the main content */
         body {
-            background-color: #f8f9fa;
             background-image: url('/images/20.jpg');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
         }
 
-        /* Main content */
+        /* Main content area styling */
         .starter-template {
-            padding: 10rem 5.5rem;
+            padding: 10rem 5rem;
             text-align: center;
-            background-color: rgba(52, 58, 64, 0.8); /* Semi-transparent background */
-            border-radius: 6px;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            margin-bottom: 5rem;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             color: #ffffff;
         }
 
         .lead {
-            font-size: 2.25rem;
-            color: #ffffff; /* Gray text */
+            font-size: 1.75rem;
+            color: #d1d1d1;
         }
 
-        /* Footer */
+        /* Footer styling */
         footer {
             padding: 1rem 0;
             background-color: #343a40;
-            color: #ffffff; /* White text */
+            color: #ffffff;
             text-align: center;
+        }
+
+        /* Spinner styling */
+        #spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 3rem;
+            height: 3rem;
+            margin-top: -1.5rem;
+            margin-left: -1.5rem;
+            border-radius: 50%;
+            border: 0.25rem solid rgba(0, 0, 0, 0.25);
+            border-top-color: #007bff;
+            animation: spinner 0.75s linear infinite;
+        }
+
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 
 <body class="d-flex">
+<!-- Spinner -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner"></div>
+</div>
+
 <!-- Navigation Bar -->
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
 <!-- Main content -->
 <main role="main" class="container">
-    <div class="starter-template">
-        <h1 th:text="#{home_h1}"></h1>
-        <p class="lead" th:text="#{home_p_lead}"></p>
-        <p th:text="#{home_p1}"></p>
-        <p th:text="#{home_p2}"></p>
-        <p th:text="#{home_p3}"></p>
+    <div class="starter-template animate__animated animate__fadeIn">
+        <h1 th:text="#{home_h1}">Welcome to Freelancer Platform</h1>
+        <p class="lead" th:text="#{home_p_lead}">Find the best freelancers for your projects</p>
+        <p th:text="#{home_p1}">Connecting clients with top freelancers worldwide.</p>
+        <p th:text="#{home_p2}">Create an account to post jobs or find work.</p>
+        <p th:text="#{home_p3}">Join our community of professionals today!</p>
     </div>
 </main>
 
 <!-- Footer -->
-<footer>
+<footer class="footer">
     <div class="container">
         <p>&copy; 2024 Freelancer Platform. All rights reserved.</p>
     </div>
 </footer>
 
-<!-- Bootstrap and JavaScript libraries -->
-<script src="/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/lib/wow/wow.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Template JavaScript -->
+<script src="/js/main.js"></script>
+<script>
+    $(document).ready(function() {
+        // Spinner
+        setTimeout(function() {
+            $('#spinner').fadeOut();
+        }, 1000);
+
+        // Initialize WOW.js for animations
+        new WOW().init();
+    });
+</script>
 </body>
 </html>

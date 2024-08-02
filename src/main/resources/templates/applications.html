@@ -17,11 +17,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="apply : ${applications}">
-            <td th:text="${apply.freelancerId}">Freelancer Name</td>
-            <td th:text="${apply.coverLetter}">Cover Letter</td>
-            <td th:text="${apply.status}">Status</td>
-            <td th:text="${apply.createdOn}">Applied On</td>
+        <tr th:each="applicationsInfo : ${applicationInfoDTOS}">
+            <td th:text="${applicationsInfo.getFreelancer().getUsername()}">Freelancer Name</td>
+            <td th:text="${applicationsInfo.coverLetter}">Cover Letter</td>
+            <td th:text="${applicationsInfo.status}">Status</td>
+            <td th:text="${applicationsInfo.createdOn}">Applied On</td>
         </tr>
         </tbody>
     </table>

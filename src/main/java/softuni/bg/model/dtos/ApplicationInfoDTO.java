@@ -14,7 +14,6 @@ public class ApplicationInfoDTO {
     private LocalDateTime createdOn;
 
 
-
     //getters and setters
 
     public JobListing getJobListing() {

@@ -55,7 +55,7 @@ public class JobListingController {
 
     @GetMapping("/edit/{id}")
     public String showEditJobListingForm(@PathVariable Long id, Model model) {
-        JobListingDTO jobListing = jobListingService.getJobListingById(id);
+        JobListingInfoDTO jobListing = jobListingService.getJobListingById(id);
         model.addAttribute("jobListingDTO", jobListing);
         return "edit-job-listing";
     }
@@ -70,5 +70,11 @@ public class JobListingController {
     public String deleteJobListing(@PathVariable Long id) {
         jobListingService.deleteJobListing(id);
         return "redirect:/job-listings";
+    }
+    @GetMapping("/details/{id}")
+    public String jobListingDetails(@PathVariable Long id, Model model, JobListingDTO jobListingDTO) {
+        JobListingInfoDTO jobListingById = jobListingService.getJobListingById(id);
+        model.addAttribute("jobListingById",jobListingById);
+        return "job-listing-details";
     }
 }

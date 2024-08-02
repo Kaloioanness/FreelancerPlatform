@@ -1,75 +1,111 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for Job</title>
-    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom Styles -->
     <style>
         body {
-            background-color: #f8f9fa;
+            background-image: url('/images/12.jpg');
+            /*background: linear-gradient(to right, #f4f6f9, #e9ecef);*/
+            font-family: 'Arial', sans-serif;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /*font-family: 'Nunito', 'Rubik', sans-serif;*/
         }
+
         .form-container {
             background: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
         .form-title {
             color: #007bff;
             margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
         }
         .form-group label {
-            font-weight: bold;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            transition: border-color 0.2s ease;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
         }
         .btn-primary {
             background-color: #007bff;
-            border-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
         }
         .btn-primary:hover {
             background-color: #0056b3;
-            border-color: #0056b3;
         }
+        .btn-primary:focus, .btn-primary:active {
+            box-shadow: none;
+        }
+        .form-text {
+            color: #6c757d;
+        }
+        .text-center {
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 col-lg-6">
             <div class="form-container">
+                <a th:href="@{/job-listings/details/{id}(id=${jobListingId})}" class="btn  btn-outline-dark bi-arrow-return-left">Return</a>
                 <h2 class="form-title">Apply for Job</h2>
                 <form th:action="@{/applications/apply}" th:object="${applicationDTO}" method="post">
                     <!-- Hidden field for job listing ID -->
                     <input type="hidden" th:field="*{jobListingId}">
 
-<!--                    &lt;!&ndash; Applicant Name &ndash;&gt;-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="applicantName">Name:</label>-->
-<!--                        <input type="text" id="applicantName" th:field="*{applicantName}" class="form-control" placeholder="Enter your full name" required>-->
-<!--                    </div>-->
-
-<!--                    &lt;!&ndash; Applicant Email &ndash;&gt;-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="applicantEmail">Email:</label>-->
-<!--                        <input type="email" id="applicantEmail" th:field="*{applicantEmail}" class="form-control" placeholder="Enter your email address" required>-->
-<!--                    </div>-->
-
                     <!-- Cover Letter -->
                     <div class="form-group">
-                        <label for="coverLetter">Cover Letter:</label>
+                        <label for="coverLetter">Cover Letter</label>
                         <textarea id="coverLetter" th:field="*{coverLetter}" class="form-control" rows="5" placeholder="Write your cover letter here" required></textarea>
+                        <small class="form-text">Include details relevant to the job you're applying for.</small>
                     </div>
 
                     <!-- CSRF Token -->
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary btn-block">Apply Now</button>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Apply Now</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -33,6 +33,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public void applyForJob(ApplicationDTO applicationDTO) {
+        boolean alreadyApplied = applicationRepository.existsByJobListingIdAndFreelancerId(
+                applicationDTO.getJobListingId(), applicationDTO.getFreelancerId());
+
+        if (alreadyApplied) {
+            throw new RuntimeException("You have already applied for this job");
+        }
+
         Application application = modelMapper.map(applicationDTO, Application.class);
 
         JobListing jobListing = jobListingRepository.findById(applicationDTO.getJobListingId())
@@ -48,9 +55,9 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<ApplicationDTO> getApplicationsForJob(Long jobListingId) {
+    public List<ApplicationInfoDTO> getApplicationsForJob(Long jobListingId) {
         return applicationRepository.findByJobListingId(jobListingId).stream()
-                .map(application -> modelMapper.map(application, ApplicationDTO.class))
+                .map(application -> modelMapper.map(application, ApplicationInfoDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -60,6 +67,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .map(application -> modelMapper.map(application, ApplicationInfoDTO.class))
                 .collect(Collectors.toList());
     }
+
 }
 
 

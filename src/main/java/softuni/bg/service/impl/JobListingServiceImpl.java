@@ -56,10 +56,10 @@ public class JobListingServiceImpl implements JobListingService {
     }
 
     @Override
-    public JobListingDTO getJobListingById(Long id) {
+    public JobListingInfoDTO getJobListingById(Long id) {
         JobListing jobListing = jobListingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job listing not found"));
-        return modelMapper.map(jobListing, JobListingDTO.class);
+        return modelMapper.map(jobListing, JobListingInfoDTO.class);
     }
 
     @Override

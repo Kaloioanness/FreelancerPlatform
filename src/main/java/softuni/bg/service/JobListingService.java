@@ -11,7 +11,7 @@ import java.util.List;
 public interface JobListingService {
     JobListingDTO createJobListing(JobListingDTO jobListingDTO);
     JobListingDTO updateJobListing(Long id, JobListingDTO jobListingDTO);
-    JobListingDTO getJobListingById(Long id);
+    JobListingInfoDTO getJobListingById(Long id);
     List<JobListingInfoDTO> getAllJobListings();
     void deleteJobListing(Long id);
     UserEntity getCurrentUser(String Invalid_client_ID);

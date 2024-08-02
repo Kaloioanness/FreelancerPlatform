@@ -2,6 +2,7 @@ package softuni.bg.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ApplicationDTO;
 import softuni.bg.model.dtos.ApplicationInfoDTO;
@@ -48,8 +49,8 @@ public class ApplicationController {
 
     @GetMapping("/job/{jobListingId}")
     public String getApplicationsForJob(@PathVariable Long jobListingId, Model model) {
-        List<ApplicationDTO> applications = applicationService.getApplicationsForJob(jobListingId);
-        model.addAttribute("applications", applications);
+        List<ApplicationInfoDTO> applicationInfoDTOS = applicationService.getApplicationsForJob(jobListingId);
+        model.addAttribute("applicationInfoDTOS", applicationInfoDTOS);
         return "applications";
     }
 
@@ -61,4 +62,5 @@ public class ApplicationController {
 //        jobListingService.getJobListingById(applications.getFirst().getJobListingId());
         return "freelancer-applications";
     }
+
 }

@@ -1,13 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Applications</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY APPLICATIONS</title>
     <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            margin-top: 150px;
+        }
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            border-top: none;
+        }
+        .table th {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            text-align: center;
+        }
+        .table td {
+            padding: 15px;
+            text-align: center;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table td:first-child {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .table td:last-child {
+            color: #6c757d;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .icon-status {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <h2>My Applications</h2>
-    <table class="table table-striped">
+    <table class="table table-responsive-md">
         <thead>
         <tr>
             <th>Job Title</th>
@@ -22,12 +73,18 @@
             <td th:text="${apply.getJobListing().getTitle()}">Job Title</td>
             <td th:text="${apply.getJobListing().getClient().getUsername()}">Job posted by</td>
             <td th:text="${apply.coverLetter}">Cover Letter</td>
-            <td th:text="${apply.status}">Status</td>
-            <td th:text="${apply.createdOn}">Applied On</td>
+            <td>
+                <i class="icon-status fas fa-circle" th:classappend="${apply.status == 'Approved' ? 'text-success' : apply.status == 'Rejected' ? 'text-danger' : 'text-warning'}"></i>
+                <span th:text="${apply.status}">Status</span>
+            </td>
+            <td th:text="${apply.createdOn.toLocalDate()}">Applied On</td>
+<!--            <td th:text="${apply.getJobListing().}">Applied On</td>-->
         </tr>
         </tbody>
     </table>
 </div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script th:src="@{/static/js/bootstrap.min.js}"></script>
 </body>
 </html>
