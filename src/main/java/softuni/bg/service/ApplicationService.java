@@ -11,5 +11,6 @@ public interface ApplicationService {
 //    List<ApplicationDTO> getApplicationsByFreelancer(Long freelancerId);
     List<ApplicationInfoDTO> getApplicationsByFreelancer(Long freelancerId);
 
+    void deleteApplicationById(Long id);
 }
 

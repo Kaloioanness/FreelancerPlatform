@@ -41,18 +41,17 @@ public class JobListingServiceImpl implements JobListingService {
     }
 
     @Override
-    public JobListingDTO updateJobListing(Long id, JobListingDTO jobListingDTO) {
+    public void updateJobListing(Long id, JobListingDTO jobListingDTO, Long clientId) {
         JobListing existingJobListing = jobListingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job listing not found"));
+
+        UserEntity client = userRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+
         modelMapper.map(jobListingDTO, existingJobListing);
-
-        UserEntity client = existingJobListing.getClient();
-
+        existingJobListing.setDatePosted(LocalDateTime.now());
         existingJobListing.setClient(client);
-        JobListing updatedJobListing = jobListingRepository.save(existingJobListing);
-        updatedJobListing.setId(id);
-        jobListingRepository.save(updatedJobListing);
-        return modelMapper.map(updatedJobListing, JobListingDTO.class);
+        jobListingRepository.save(existingJobListing);
     }
 
     @Override
@@ -71,9 +70,9 @@ public class JobListingServiceImpl implements JobListingService {
 
     @Override
     public void deleteJobListing(Long id) {
-        JobListing jobListing = jobListingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job listing not found"));
-        jobListingRepository.delete(jobListing);
+//        JobListing jobListing = jobListingRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Job listing not found"));
+        jobListingRepository.deleteById(id);
     }
 
     @Override
@@ -93,6 +92,13 @@ public class JobListingServiceImpl implements JobListingService {
         } else {
             return principal.toString();
         }
+    }
+
+    @Override
+    public List<JobListingInfoDTO> getJobListingsByClient(Long clientId) {
+        return jobListingRepository.findByClientId(clientId).stream()
+                .map(jobListing -> modelMapper.map(jobListing, JobListingInfoDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

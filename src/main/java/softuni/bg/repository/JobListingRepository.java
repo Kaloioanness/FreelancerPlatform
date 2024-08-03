@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface JobListingRepository extends JpaRepository<JobListing, Long> {
 
     Optional<List<JobListing>> findByClient(UserEntity client);
+    List<JobListing> findByClientId(Long client_id);
+
     Optional<List<JobListing>> findByClientIsNot(UserEntity client);
     List<JobListing> findByTitleContainingIgnoreCase(String keyword);
 

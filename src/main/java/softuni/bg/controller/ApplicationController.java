@@ -2,14 +2,11 @@ package softuni.bg.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ApplicationDTO;
 import softuni.bg.model.dtos.ApplicationInfoDTO;
 import softuni.bg.service.ApplicationService;
-import softuni.bg.service.JobListingService;
 import softuni.bg.service.UserService;
-import softuni.bg.service.impl.JobListingServiceImpl;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,14 +17,11 @@ public class ApplicationController {
 
 
     private final ApplicationService applicationService;
-    private final JobListingService jobListingService;
-
 
     private final UserService userService;
 
-    public ApplicationController(ApplicationService applicationService, JobListingService jobListingService, UserService userService) {
+    public ApplicationController(ApplicationService applicationService, UserService userService) {
         this.applicationService = applicationService;
-        this.jobListingService = jobListingService;
         this.userService = userService;
     }
 
@@ -61,6 +55,11 @@ public class ApplicationController {
         model.addAttribute("applications", applications);
 //        jobListingService.getJobListingById(applications.getFirst().getJobListingId());
         return "freelancer-applications";
+    }
+    @PostMapping("/delete/{id}")
+    public String deleteApplication(@PathVariable Long id) {
+        applicationService.deleteApplicationById(id);
+        return "redirect:/applications/freelancer";
     }
 
 }

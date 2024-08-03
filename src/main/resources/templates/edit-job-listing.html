@@ -2,31 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Job Listing</title>
-    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body{
+            background-image: url('/images/4.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Nunito', 'Rubik', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h2>Edit Job Listing</h2>
-    <form th:action="@{/job-listings/edit/{id}(id=${jobListingDTO.id})}" th:object="${jobListingDTO}" method="post">
+    <h2 class="mb-4">Edit Job Listing</h2>
+    <form th:action="@{/client-job-listings/edit/{id}(id=${jobListingDTO.id})}" th:object="${jobListingDTO}" method="post">
         <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" id="title" th:field="*{title}" class="form-control" required>
+            <label for="title"><i class="fas fa-heading"></i> Title:</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter job title" required>
         </div>
         <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" th:field="*{description}" class="form-control" rows="5" required></textarea>
+            <label for="description"><i class="fas fa-align-left"></i> Description:</label>
+            <textarea id="description" th:field="*{description}" class="form-control" rows="5" placeholder="Enter job description" required></textarea>
         </div>
         <div class="form-group">
-            <label for="budget">Budget:</label>
-            <input type="number" id="budget" th:field="*{budget}" class="form-control" required>
+            <label for="budget"><i class="fas fa-dollar-sign"></i> Budget:</label>
+            <input type="number" id="budget" th:field="*{budget}" class="form-control" placeholder="Enter budget" required>
         </div>
         <div class="form-group">
-            <label for="skillsRequired">Skills Required:</label>
-            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" class="form-control" required>
+            <label for="skillsRequired"><i class="fas fa-tools"></i> Skills Required:</label>
+            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" class="form-control" placeholder="Enter required skills" required>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="/client-job-listings" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Job Listings</a>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+
     </form>
 </div>
-<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

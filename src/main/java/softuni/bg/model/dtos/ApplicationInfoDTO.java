@@ -6,6 +6,7 @@ import softuni.bg.model.entity.UserEntity;
 import java.time.LocalDateTime;
 
 public class ApplicationInfoDTO {
+    private Long id;
 
     private JobListing jobListing;
     private UserEntity freelancer;
@@ -15,6 +16,14 @@ public class ApplicationInfoDTO {
 
 
     //getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public JobListing getJobListing() {
         return jobListing;

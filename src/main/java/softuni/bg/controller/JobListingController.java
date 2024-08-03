@@ -16,12 +16,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/job-listings")
 public class JobListingController {
-
-    @Autowired
-    private JobListingService jobListingService;
-
-    @Autowired
-    private UserService userService;
+    private final JobListingService jobListingService;
+    public JobListingController(JobListingService jobListingService) {
+        this.jobListingService = jobListingService;
+    }
 
     @GetMapping
     public String getAllJobListings(Model model) {
@@ -30,47 +28,6 @@ public class JobListingController {
         return "job-listings";
     }
 
-    @GetMapping("/create")
-    public String showCreateJobListingForm(Model model) {
-        model.addAttribute("jobListingDTO", new JobListingDTO());
-        return "create-job-listing";
-    }
-
-    @PostMapping("/create")
-    public String createJobListing(@ModelAttribute("jobListingDTO") JobListingDTO jobListingDTO, Principal principal, Model model) {
-        String username = principal.getName();
-        System.out.println("Logged in user username: " + username);
-
-        UserDTO userDTO = userService.findUserByUsername(username);
-        if (userDTO == null) {
-            model.addAttribute("error", "User not found with username: " + username);
-            return "error";
-        }
-
-        Long clientId = userDTO.getId();
-        jobListingDTO.setClientId(clientId);
-        jobListingService.createJobListing(jobListingDTO);
-        return "redirect:/job-listings";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String showEditJobListingForm(@PathVariable Long id, Model model) {
-        JobListingInfoDTO jobListing = jobListingService.getJobListingById(id);
-        model.addAttribute("jobListingDTO", jobListing);
-        return "edit-job-listing";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String editJobListing(@PathVariable Long id, @ModelAttribute("jobListingDTO") JobListingDTO jobListingDTO) {
-        jobListingService.updateJobListing(id, jobListingDTO);
-        return "redirect:/job-listings";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteJobListing(@PathVariable Long id) {
-        jobListingService.deleteJobListing(id);
-        return "redirect:/job-listings";
-    }
     @GetMapping("/details/{id}")
     public String jobListingDetails(@PathVariable Long id, Model model, JobListingDTO jobListingDTO) {
         JobListingInfoDTO jobListingById = jobListingService.getJobListingById(id);

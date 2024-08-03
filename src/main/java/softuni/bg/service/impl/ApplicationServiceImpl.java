@@ -68,6 +68,11 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteApplicationById(Long id) {
+        applicationRepository.deleteById(id);
+    }
+
 }
 
 
