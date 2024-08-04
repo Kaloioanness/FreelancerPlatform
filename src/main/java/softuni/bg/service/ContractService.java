@@ -5,10 +5,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.ContractDTO;
+import softuni.bg.model.entity.Application;
 import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
 import softuni.bg.model.enums.ContractStatus;
+import softuni.bg.repository.ApplicationRepository;
 import softuni.bg.repository.ContractRepository;
 
 import java.time.LocalDateTime;
@@ -20,10 +22,12 @@ import java.util.stream.Collectors;
 public class ContractService {
     private final ContractRepository contractRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationRepository applicationRepository;
 
-    public ContractService(ContractRepository contractRepository, ModelMapper modelMapper) {
+    public ContractService(ContractRepository contractRepository, ModelMapper modelMapper, ApplicationRepository applicationRepository) {
         this.contractRepository = contractRepository;
         this.modelMapper = modelMapper;
+        this.applicationRepository = applicationRepository;
     }
 
     public List<ContractDTO> findAllContracts() {
@@ -62,5 +66,19 @@ public class ContractService {
 
     private Contract convertToEntity(ContractDTO contractDTO) {
         return modelMapper.map(contractDTO, Contract.class);
+    }
+
+    public void createContract(Long applicationId) {
+        Application application = applicationRepository.findById(applicationId).
+                orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
+
+        Contract contract = new Contract();
+        contract.setApplication(application);
+        contract.setClient(application.getJobListing().getClient());
+        contract.setFreelancer(application.getFreelancer());
+        contract.setTerms("Default terms");  // You can set this dynamically as needed
+        contract.setStatus("Pending");       // Initial status
+
+        contractRepository.save(contract);
     }
 }
