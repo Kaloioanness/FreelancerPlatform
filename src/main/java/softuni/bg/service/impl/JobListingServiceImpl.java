@@ -4,10 +4,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import softuni.bg.model.dtos.JobListingDTO;
 import softuni.bg.model.dtos.JobListingInfoDTO;
+import softuni.bg.model.entity.Application;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
+import softuni.bg.repository.ApplicationRepository;
 import softuni.bg.repository.JobListingRepository;
 import softuni.bg.repository.UserRepository;
 import softuni.bg.service.JobListingService;
@@ -22,11 +25,14 @@ public class JobListingServiceImpl implements JobListingService {
     private final JobListingRepository jobListingRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
-    public JobListingServiceImpl(JobListingRepository jobListingRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public JobListingServiceImpl(JobListingRepository jobListingRepository, ModelMapper modelMapper, UserRepository userRepository, ApplicationRepository applicationRepository) {
         this.jobListingRepository = jobListingRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.applicationRepository = applicationRepository;
+
     }
 
     @Override
@@ -72,6 +78,8 @@ public class JobListingServiceImpl implements JobListingService {
     public void deleteJobListing(Long id) {
 //        JobListing jobListing = jobListingRepository.findById(id)
 //                .orElseThrow(() -> new RuntimeException("Job listing not found"));
+        applicationRepository.deleteAll(applicationRepository.findByJobListingId(id));
+
         jobListingRepository.deleteById(id);
     }
 
@@ -93,11 +101,21 @@ public class JobListingServiceImpl implements JobListingService {
             return principal.toString();
         }
     }
-
+    @Transactional
     @Override
     public List<JobListingInfoDTO> getJobListingsByClient(Long clientId) {
-        return jobListingRepository.findByClientId(clientId).stream()
-                .map(jobListing -> modelMapper.map(jobListing, JobListingInfoDTO.class))
+        List<JobListing> jobListings = jobListingRepository.findByClientId(clientId);
+
+        return jobListings.stream()
+                .map(jobListing -> {
+                    JobListingInfoDTO dto = modelMapper.map(jobListing, JobListingInfoDTO.class);
+
+                    int applicationCount = jobListing.getApplications().size();
+
+                    dto.setApplicationsCount(applicationCount);
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
