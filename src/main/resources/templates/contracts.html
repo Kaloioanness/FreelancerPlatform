@@ -23,10 +23,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="contract : ${contracts}">
-            <td th:text="${contract.client.username}">Client</td>
-            <td th:text="${contract.freelancer.username}">Freelancer</td>
-            <td th:text="${contract.status}">Status</td>
+        <tr th:each="myContract : ${myContract}">
+            <td th:text="${myContract.}">Client</td>
+            <td th:text="${myContract.freelancer.username}">Freelancer</td>
+            <td th:text="${myContract.status}">Status</td>
             <td>
                 <a th:href="@{/contracts/{id}(id=${contract.id})}" class="btn btn-info btn-sm">View</a>
                 <a th:href="@{/contracts/edit/{id}(id=${contract.id})}" class="btn btn-warning btn-sm">Edit</a>
