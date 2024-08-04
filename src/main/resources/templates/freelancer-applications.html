@@ -91,16 +91,37 @@
             animation: spinner 0.75s linear infinite;
         }
 
-        @keyframes spinner {
-            to { transform: rotate(360deg); }
+        /* Cover letter styles */
+        .cover-letter-container {
+            position: relative;
+            max-width: 300px; /* Adjust as needed */
+        }
+        .cover-letter-button {
+            display: inline-block;
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .cover-letter-content {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 5px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            max-height: 200px; /* Adjust as needed */
+            overflow-y: auto; /* Enable vertical scrolling if content overflows */
+        }
+        .cover-letter-content.show {
+            display: block;
         }
     </style>
 </head>
 <body class="d-flex">
-<!-- Spinner -->
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-    <div class="spinner"></div>
-</div>
 
 <!-- Navigation Bar -->
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'freelancer'})}"></div>
@@ -124,7 +145,10 @@
             <tr th:each="apply : ${applications}">
                 <td th:text="${apply.getJobListing().getTitle()}">Job Title</td>
                 <td th:text="${apply.getJobListing().getClient().getUsername()}">Job posted by</td>
-                <td th:text="${apply.coverLetter}">Cover Letter</td>
+                <td class="cover-letter-container">
+                    <button class="cover-letter-button" onclick="toggleCoverLetter(this)">View Cover Letter</button>
+                    <div class="cover-letter-content" th:text="${apply.coverLetter}">Cover Letter Content</div>
+                </td>
                 <td>
                     <i class="icon-status fas fa-circle" th:classappend="${apply.status == 'Approved' ? 'text-success' : apply.status == 'Rejected' ? 'text-danger' : 'text-warning'}"></i>
                     <span th:text="${apply.status}">Status</span>
@@ -159,15 +183,11 @@
 <!-- Template JavaScript -->
 <script src="/js/main.js"></script>
 <script>
-    $(document).ready(function() {
-        // Spinner
-        setTimeout(function() {
-            $('#spinner').fadeOut();
-        }, 1000);
-
-        // Initialize WOW.js for animations
-        new WOW().init();
-    });
+    function toggleCoverLetter(button) {
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? 'Hide Cover Letter' : 'View Cover Letter';
+    }
 </script>
 </body>
 </html>
