@@ -55,12 +55,12 @@ public class ContractController {
         return "redirect:/contracts/list";
     }
 
-    @GetMapping("/freelancer")
+    @GetMapping
     public String findByFreelancer(@RequestParam Long freelancerId, Model model) {
         UserEntity freelancer = userService.findById(freelancerId)
                 .orElseThrow(() -> new RuntimeException("User with id " + freelancerId + " not found"));
-        List<ContractDTO> contracts = contractService.findByFreelancer(freelancer);
-        model.addAttribute("contracts", contracts);
+        List<ContractDTO> myContract = contractService.findByFreelancer(freelancer);
+        model.addAttribute("myContract", myContract);
         return "contracts";
     }
 
@@ -73,5 +73,14 @@ public class ContractController {
         return "contracts";
     }
 
+
+    @PostMapping("/create")
+    public String createContract(@RequestParam("applicationId") Long applicationId, Model model) {
+        // Create contract logic
+        contractService.createContract(applicationId);
+
+        // Redirect to the job applications page or any other appropriate page
+        return "redirect:/client/job-applications";
+    }
 
 }
