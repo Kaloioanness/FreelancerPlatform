@@ -7,25 +7,31 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ReviewDTO;
+import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.UserEntity;
+import softuni.bg.repository.ContractRepository;
 import softuni.bg.service.ReviewService;
 import softuni.bg.service.UserService;
 import softuni.bg.service.impl.JobListingServiceImpl;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/reviews")
+@RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
     private final UserService userService;
     private final JobListingServiceImpl jobListingServiceImpl;
+    private final ContractRepository contractRepository;
 
-    public ReviewController(ReviewService reviewService, UserService userService, JobListingServiceImpl jobListingServiceImpl) {
+
+    public ReviewController(ReviewService reviewService, UserService userService, JobListingServiceImpl jobListingServiceImpl, ContractRepository contractRepository) {
         this.reviewService = reviewService;
         this.userService = userService;
         this.jobListingServiceImpl = jobListingServiceImpl;
+        this.contractRepository = contractRepository;
     }
 
     @GetMapping("/{reviewId}")
@@ -51,8 +57,8 @@ public class ReviewController {
             return "review-list"; // Return to the same page with validation errors
         }
 
-        ReviewDTO createdReview = reviewService.createReview(reviewDTO);
-        return "redirect:/api/reviews"; // Redirect to the review list page after successful creation
+//        ReviewDTO createdReview = reviewService.createReview(reviewDTO);
+        return "redirect:/reviews"; // Redirect to the review list page after successful creation
     }
 
 
@@ -83,4 +89,19 @@ public class ReviewController {
         return "review-list";
     }
 
+
+    @GetMapping("/create")
+    public String showCreateReviewForm(@RequestParam Long contractId, Model model) {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setContract(contractRepository.findById(contractId).get());
+        model.addAttribute("reviewDTO", reviewDTO);
+        return "create-review";
+    }
+
+    @PostMapping("/create")
+    public String createReview(@ModelAttribute ReviewDTO reviewDTO) {
+        reviewDTO.setDateReviewed(LocalDate.now());
+        reviewService.createReview(reviewDTO);
+        return "redirect:/contracts/" + reviewDTO.getContract().getId(); // Redirect to contract details or list page
+    }
 }
