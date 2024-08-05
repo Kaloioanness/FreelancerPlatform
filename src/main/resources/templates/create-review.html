@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Create Review</h2>
+    <form th:action="@{/reviews/create}" th:object="${reviewDTO}" method="post">
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <input type="number" id="rating" th:field="*{rating}" class="form-control" min="1" max="5" required>
+        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="title">Title</label>-->
+<!--            <input type="text" id="title" th:field="*{title}" class="form-control" required>-->
+<!--        </div>-->
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea id="comment" th:field="*{comment}" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="reviewerId">Reviewer</label>
+            <input type="number" id="reviewerId" th:field="*{reviewer.getId()}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="revieweeId">Reviewee</label>
+            <input type="number" id="revieweeId" th:field="*{reviewee.getId()}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="contractId">Contract for</label>
+            <input type="number" id="contractId" th:field="*{contract.getId()}" class="form-control" readonly>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
