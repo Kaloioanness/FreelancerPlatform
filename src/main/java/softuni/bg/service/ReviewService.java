@@ -4,10 +4,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.ReviewDTO;
+import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.Review;
 import softuni.bg.model.entity.UserEntity;
+import softuni.bg.repository.ContractRepository;
 import softuni.bg.repository.ReviewRepository;
+import softuni.bg.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +20,13 @@ import java.util.stream.Collectors;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ModelMapper modelMapper;
-    public ReviewService(ReviewRepository reviewRepository, ModelMapper modelMapper) {
+    private final ContractRepository contractRepository;
+    private final UserRepository userRepository;
+    public ReviewService(ReviewRepository reviewRepository, ModelMapper modelMapper, ContractRepository contractRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.modelMapper = modelMapper;
+        this.contractRepository = contractRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ReviewDTO> findByReviewer(UserEntity reviewer) {
@@ -37,10 +44,26 @@ public class ReviewService {
     }
 
 
-    public ReviewDTO createReview(ReviewDTO reviewDTO) {
-        Review review = convertToEntity(reviewDTO);
-        Review savedReview = reviewRepository.save(review);
-        return convertToDTO(savedReview);
+    public void createReview(ReviewDTO reviewDTO) {
+        Review review = new Review();
+        review.setRating(reviewDTO.getRating());
+        review.setComment(reviewDTO.getComment());
+        review.setDateReviewed(reviewDTO.getDateReviewed());
+
+
+        Contract contract = contractRepository.findById(reviewDTO.getContract().getId())
+                .orElseThrow(() -> new RuntimeException("Contract not found"));
+        review.setContract(contract);
+
+        UserEntity reviewer = userRepository.findById(reviewDTO.getReviewer().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        review.setReviewer(reviewer);
+
+        UserEntity reviewee = userRepository.findById(reviewDTO.getReviewee().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        review.setReviewee(reviewee);
+
+        reviewRepository.save(review);
     }
 
     public Optional<ReviewDTO> getReviewById(Long reviewId) {
