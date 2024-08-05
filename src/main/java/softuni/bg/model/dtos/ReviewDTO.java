@@ -1,17 +1,23 @@
 package softuni.bg.model.dtos;
 
+import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
+import softuni.bg.model.entity.UserEntity;
+
+import java.time.LocalDate;
 
 public class ReviewDTO {
 
     private Long id;
-    private String content;
+    private String comment;
     private Integer rating;
-    private Long reviewerId; // ID of the user who wrote the review
-    private Long revieweeId; // ID of the user being reviewed
-    private Long contractId; // ID of the contract
+    private UserEntity reviewer;
+    private UserEntity reviewee;
+    private Contract contract;
+    private LocalDate dateReviewed;
 
     // Getters and setters
+
 
     public Long getId() {
         return id;
@@ -21,12 +27,12 @@ public class ReviewDTO {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getComment() {
+        return comment;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Integer getRating() {
@@ -37,27 +43,35 @@ public class ReviewDTO {
         this.rating = rating;
     }
 
-    public Long getReviewerId() {
-        return reviewerId;
+    public UserEntity getReviewer() {
+        return reviewer;
     }
 
-    public void setReviewerId(Long reviewerId) {
-        this.reviewerId = reviewerId;
+    public void setReviewer(UserEntity reviewer) {
+        this.reviewer = reviewer;
     }
 
-    public Long getRevieweeId() {
-        return revieweeId;
+    public UserEntity getReviewee() {
+        return reviewee;
     }
 
-    public void setRevieweeId(Long revieweeId) {
-        this.revieweeId = revieweeId;
+    public void setReviewee(UserEntity reviewee) {
+        this.reviewee = reviewee;
     }
 
-    public Long getContractId() {
-        return contractId;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setContractId(Long contractId) {
-        this.contractId = contractId;
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
+
+    public LocalDate getDateReviewed() {
+        return dateReviewed;
+    }
+
+    public void setDateReviewed(LocalDate dateReviewed) {
+        this.dateReviewed = dateReviewed;
     }
 }
