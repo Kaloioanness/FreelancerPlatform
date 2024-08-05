@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ApplicationDTO;
-import softuni.bg.model.dtos.ApplicationInfoDTO;
+import softuni.bg.model.dtos.info.ApplicationInfoDTO;
 import softuni.bg.service.ApplicationService;
 import softuni.bg.service.UserService;
 
