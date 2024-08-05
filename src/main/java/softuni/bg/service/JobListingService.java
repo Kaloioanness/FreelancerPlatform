@@ -1,7 +1,7 @@
 package softuni.bg.service;
 
 import softuni.bg.model.dtos.JobListingDTO;
-import softuni.bg.model.dtos.JobListingInfoDTO;
+import softuni.bg.model.dtos.info.JobListingInfoDTO;
 import softuni.bg.model.entity.UserEntity;
 
 import java.util.List;
