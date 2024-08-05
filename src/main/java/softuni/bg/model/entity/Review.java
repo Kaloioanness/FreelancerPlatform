@@ -3,6 +3,7 @@ package softuni.bg.model.entity;
 import jakarta.persistence.*;
 import softuni.bg.model.BaseEntity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,12 +23,14 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "reviewee_id", nullable = false)
     private UserEntity reviewee;
 
+
     @ManyToOne
     @JoinColumn(name = "contract_id")
     private Contract contract;
 
+
     @Column(nullable = false)
-    private LocalDateTime dateReviewed;
+    private LocalDate dateReviewed;
 
     public Review (){}
     //GETTERS AND SETTERS
@@ -75,11 +78,11 @@ public class Review extends BaseEntity {
         this.comment = comment;
     }
 
-    public LocalDateTime getDateReviewed() {
+    public LocalDate getDateReviewed() {
         return dateReviewed;
     }
 
-    public void setDateReviewed(LocalDateTime dateReviewed) {
+    public void setDateReviewed(LocalDate dateReviewed) {
         this.dateReviewed = dateReviewed;
     }
 
