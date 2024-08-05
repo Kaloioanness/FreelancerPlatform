@@ -7,11 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ContractDTO;
+import softuni.bg.model.dtos.UserDTO;
+import softuni.bg.model.dtos.info.ContractInfoDTO;
 import softuni.bg.model.entity.UserEntity;
 import softuni.bg.model.enums.ContractStatus;
 import softuni.bg.service.ContractService;
 import softuni.bg.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -56,10 +59,12 @@ public class ContractController {
     }
 
     @GetMapping
-    public String findByFreelancer(@RequestParam Long freelancerId, Model model) {
-        UserEntity freelancer = userService.findById(freelancerId)
-                .orElseThrow(() -> new RuntimeException("User with id " + freelancerId + " not found"));
-        List<ContractDTO> myContract = contractService.findByFreelancer(freelancer);
+    public String findByFreelancer( Principal principal, Model model) { //@RequestParam
+        UserDTO userByUsername = userService.findUserByUsername(principal.getName());
+        Long id = userByUsername.getId();
+        UserEntity freelancer = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        List<ContractInfoDTO> myContract = contractService.findByFreelancer(freelancer);
         model.addAttribute("myContract", myContract);
         return "contracts";
     }
@@ -80,7 +85,7 @@ public class ContractController {
         contractService.createContract(applicationId);
 
         // Redirect to the job applications page or any other appropriate page
-        return "redirect:/client/job-applications";
+        return "redirect:/applications/job/" + applicationId;
     }
 
 }
