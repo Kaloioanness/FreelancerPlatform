@@ -1,7 +1,7 @@
 package softuni.bg.service;
 
 import softuni.bg.model.dtos.ApplicationDTO;
-import softuni.bg.model.dtos.ApplicationInfoDTO;
+import softuni.bg.model.dtos.info.ApplicationInfoDTO;
 
 import java.util.List;
 
