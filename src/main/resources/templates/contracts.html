@@ -19,16 +19,18 @@
             <th>Client</th>
             <th>Freelancer</th>
             <th>Status</th>
+            <th>Terms</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="myContract : ${myContract}">
-            <td th:text="${myContract.}">Client</td>
-            <td th:text="${myContract.freelancer.username}">Freelancer</td>
-            <td th:text="${myContract.status}">Status</td>
+        <tr th:each="contract : ${myContract}">
+            <td th:text="${contract.client.getUsername()}">Client</td>
+            <td th:text="${contract.freelancer.username}">Freelancer</td>
+            <td th:text="${contract.status}">Status</td>
+            <td th:text="${contract.terms}">Terms</td>
             <td>
-                <a th:href="@{/contracts/{id}(id=${contract.id})}" class="btn btn-info btn-sm">View</a>
+                <a th:href="@{/reviews/create(contractId=${contract.getId()})}" class="btn btn-warning btn-sm">Create Review</a>
                 <a th:href="@{/contracts/edit/{id}(id=${contract.id})}" class="btn btn-warning btn-sm">Edit</a>
                 <form th:action="@{/contracts/delete/{id}(id=${contract.id})}" method="post" class="d-inline">
                     <input type="hidden" name="_method" value="DELETE"/>
