@@ -1,16 +1,12 @@
 package softuni.bg.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.JobListingDTO;
-import softuni.bg.model.dtos.JobListingInfoDTO;
-import softuni.bg.model.dtos.UserDTO;
+import softuni.bg.model.dtos.info.JobListingInfoDTO;
 import softuni.bg.service.JobListingService;
-import softuni.bg.service.UserService;
 
-import java.security.Principal;
 import java.util.List;
 
 @Controller
