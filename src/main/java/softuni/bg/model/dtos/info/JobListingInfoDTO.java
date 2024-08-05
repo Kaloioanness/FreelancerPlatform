@@ -1,4 +1,4 @@
-package softuni.bg.model.dtos;
+package softuni.bg.model.dtos.info;
 
 import softuni.bg.model.entity.UserEntity;
 
