@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.ContractDTO;
+import softuni.bg.model.dtos.info.ContractInfoDTO;
 import softuni.bg.model.entity.Application;
 import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
@@ -42,11 +43,9 @@ public class ContractService {
         return contractOptional.map(this::convertToDTO);
     }
 
-    public List<ContractDTO> findByFreelancer(UserEntity freelancer) {
+    public List<ContractInfoDTO> findByFreelancer(UserEntity freelancer) {
         List<Contract> contracts = contractRepository.findByFreelancer(freelancer);
-        return contracts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return contracts.stream().map(this::convertToInfoDTO).toList();
     }
 
     public List<ContractDTO> findByClient(UserEntity client) {
@@ -57,11 +56,21 @@ public class ContractService {
     }
 
     public void deleteContract(Long contractId) {
+        Optional<Contract> currentContract = contractRepository.findById(contractId);
+        if (currentContract.isEmpty()){
+            throw new RuntimeException("Contract not found.");
+        }
+        List<Application> allByJobListingId = applicationRepository.findAllByJobListingId(currentContract.get().getApplication().getJobListing().getId());
+        allByJobListingId.forEach(application -> application.setStatus("Pending"));
+        applicationRepository.saveAll(allByJobListingId);
         contractRepository.deleteById(contractId);
     }
 
     private ContractDTO convertToDTO(Contract contract) {
         return modelMapper.map(contract, ContractDTO.class);
+    }
+    private ContractInfoDTO convertToInfoDTO(Contract contract) {
+        return modelMapper.map(contract, ContractInfoDTO.class);
     }
 
     private Contract convertToEntity(ContractDTO contractDTO) {
@@ -72,13 +81,23 @@ public class ContractService {
         Application application = applicationRepository.findById(applicationId).
                 orElseThrow(() -> new IllegalArgumentException("Invalid application ID"));
 
+
+        applicationRepository.save(application);
         Contract contract = new Contract();
         contract.setApplication(application);
         contract.setClient(application.getJobListing().getClient());
         contract.setFreelancer(application.getFreelancer());
-        contract.setTerms("Default terms");  // You can set this dynamically as needed
-        contract.setStatus("Pending");       // Initial status
+        contract.setTerms("Default terms");  // TODO: i should make it dynamically
+        contract.setStatus("Pending");
 
+        //setting status rejected to other applications
+        List<Application> byJobListingId = applicationRepository.findByJobListingId(application.getJobListing().getId());
+        for (Application application1 : byJobListingId) {
+            application1.setStatus("Rejected");
+            applicationRepository.save(application1);
+        }
+        application.setStatus("Approved");
+        applicationRepository.save(application);
         contractRepository.save(contract);
     }
 }
