@@ -25,8 +25,8 @@ public class JobListingController {
     }
 
     @GetMapping("/details/{id}")
-    public String jobListingDetails(@PathVariable Long id, Model model, JobListingDTO jobListingDTO) {
-        JobListingInfoDTO jobListingById = jobListingService.getJobListingById(id);
+    public String jobListingDetails(@PathVariable Long id, Model model) {
+        JobListingDTO jobListingById = jobListingService.getJobListingById(id);
         model.addAttribute("jobListingById",jobListingById);
         return "job-listing-details";
     }
