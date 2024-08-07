@@ -13,6 +13,7 @@ import softuni.bg.model.entity.UserEntity;
 import softuni.bg.model.enums.ContractStatus;
 import softuni.bg.repository.ApplicationRepository;
 import softuni.bg.repository.ContractRepository;
+import softuni.bg.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,11 +25,13 @@ public class ContractService {
     private final ContractRepository contractRepository;
     private final ModelMapper modelMapper;
     private final ApplicationRepository applicationRepository;
+    private final UserRepository userRepository;
 
-    public ContractService(ContractRepository contractRepository, ModelMapper modelMapper, ApplicationRepository applicationRepository) {
+    public ContractService(ContractRepository contractRepository, ModelMapper modelMapper, ApplicationRepository applicationRepository, UserRepository userRepository) {
         this.contractRepository = contractRepository;
         this.modelMapper = modelMapper;
         this.applicationRepository = applicationRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ContractDTO> findAllContracts() {
@@ -41,6 +44,9 @@ public class ContractService {
     public Optional<ContractDTO> findById(Long id) {
         Optional<Contract> contractOptional = contractRepository.findById(id);
         return contractOptional.map(this::convertToDTO);
+    }
+    public Contract getContractById(Long id){
+        return contractRepository.findById(id).get();
     }
 
     public List<ContractInfoDTO> findByFreelancer(UserEntity freelancer) {
@@ -99,5 +105,13 @@ public class ContractService {
         application.setStatus("Approved");
         applicationRepository.save(application);
         contractRepository.save(contract);
+    }
+
+
+    public UserEntity returnOtherUser(Contract contract,UserEntity loggedUser){
+        if (contract.getClient().getId() == loggedUser.getId()){
+            return userRepository.findById(contract.getFreelancer().getId()).get();
+        }
+        else return userRepository.findById(contract.getClient().getId()).get();
     }
 }
