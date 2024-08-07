@@ -7,25 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
     <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/lib/animate/animate.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
-    <!-- Customized Bootstrap Stylesheet -->
     <style>
         body {
             background-image: url('/img/createjob2.jpg');
@@ -58,7 +46,6 @@
             background-color: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-
         }
         .form-group label {
             font-weight: 600;
@@ -87,43 +74,56 @@
             margin-bottom: 30px;
             color: #ffffff;
         }
-        input{
+        input {
             padding: 50px;
         }
-        label{
+        label {
             font-size: 20px;
         }
-        button{
+        button {
             font-size: 25px;
         }
-
+        .invalid-feedback {
+            display: block;
+        }
     </style>
 </head>
 <body>
 <!-- Navigation Bar -->
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'client-job-listings'})}"></div>
 
-
 <div class="overlay"></div>
 <div class="container">
     <h1 class="text-center">CREATE JOB LISTING</h1>
-    <form th:action="@{/client-job-listings/create}" th:object="${jobListingDTO}" method="post" id="jobListingForm">
+    <form
+            th:action="@{/client-job-listings/create}"
+            th:object="${jobListingData}"
+            th:method="post"
+            id="jobListingForm">
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter job title" required>
+            <small th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
             <textarea id="description" th:field="*{description}" class="form-control" rows="7" placeholder="Enter job description" required></textarea>
+            <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="budget">Budget:</label>
-            <input type="number" id="budget" th:field="*{budget}" class="form-control" placeholder="Enter budget" required>
+            <input type="number" id="budget" th:field="*{budget}" class="form-control" name="budget" placeholder="Enter budget" required>
+            <small th:if="${#fields.hasErrors('budget')}" th:errors="*{budget}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="skillsRequired">Skills Required:</label>
-            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" class="form-control" placeholder="Enter required skills" required>
+            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" class="form-control" placeholder="Enter required skills"
+                   name= "skillsRequired"
+                   th:errorclass="'is-invalid alert-danger'" required>
+            <small th:each="error: ${#fields.errors('skillsRequired')}" th:text="${error}" class="invalid-feedback text-danger"></small>
+            <small class="invalid-feedback text-danger"></small>
         </div>
+
         <button type="submit" class="btn btn-primary btn-block">Create</button>
     </form>
 </div>
@@ -140,24 +140,19 @@
 <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Initialize AOS
         AOS.init();
 
-        // Form submission with SweetAlert2
-        $('#jobListingForm').on('submit', function(event) {
-            event.preventDefault();
-            // Assuming validation passed
+        // Show success message if redirected after form submission
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
             Swal.fire({
                 title: 'Success!',
                 text: 'Your job listing has been created.',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            }).then(() => {
-                this.submit();
             });
-        });
+        }
     });
 </script>
-
 </body>
 </html>
