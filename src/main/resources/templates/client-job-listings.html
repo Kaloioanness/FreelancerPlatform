@@ -46,7 +46,7 @@
             max-width: 900px;
             margin: 20px auto;
             background-color: rgba(0, 0, 0, 0.85);
-            padding: 40px;
+            padding-top: 90px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -143,14 +143,36 @@
         <div class="card-body">
             <h5 th:text="${jobs.title}">Job Title</h5>
             <p><strong>Description:</strong> <span th:text="${jobs.description}">Java, MySQL, etc.</span></p>
-            <p><strong>Budget:</strong> <span th:text="${jobs.budget}">$1000</span></p>
+            <p><strong>Budget:</strong> <span class="budget-value" th:text="${jobs.budget}">$1000</span></p>
             <p><strong>Skills Required:</strong> <span th:text="${jobs.skillsRequired}">Java, MySQL, etc.</span></p>
             <p><strong>Date Posted:</strong> <span th:text="${jobs.datePosted.toLocalDate()}">2024-07-29</span></p>
-            <p><strong>Applications</strong> <span th:text="${jobs.getApplicationsCount()}">3</span></p>
+            <p><strong>Applications:</strong> <span th:text="${jobs.getApplicationsCount()}">3</span></p>
 
             <a th:href="@{/client-job-listings/edit/{id}(id=${jobs.id})}" class="btn btn-primary">Edit</a>
             <a th:href="@{/applications/job/{id}(id=${jobs.id})}" class="btn btn-primary3">Applications</a>
             <button class="btn btn-danger" th:onclick="'deleteJob(' + ${jobs.id} + ')'">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for entering image URL -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Enter Image URL</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="imageUrlInput">Image URL</label>
+                    <input type="url" class="form-control" id="imageUrlInput" placeholder="Enter image URL">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveImageUrl">Save changes</button>
+            </div>
         </div>
     </div>
 </div>
@@ -182,6 +204,39 @@
                 });
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Budget validation
+        const budgetFields = document.querySelectorAll('.budget-value');
+        budgetFields.forEach(function(field) {
+            const budget = parseFloat(field.textContent.replace('$', ''));
+            if (budget <= 0) {
+                field.style.color = 'red';
+                field.textContent = 'Budget must be a positive number';
+            }
+        });
+
+        // Modal for image URL input
+        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        const imageUrlInput = document.getElementById('imageUrlInput');
+        const saveImageUrlButton = document.getElementById('saveImageUrl');
+
+        document.querySelectorAll('.card img').forEach(img => {
+            img.addEventListener('click', () => {
+                imageModal.show();
+            });
+        });
+
+        saveImageUrlButton.addEventListener('click', () => {
+            const imageUrl = imageUrlInput.value.trim();
+            if (imageUrl) {
+                // Handle the image URL (e.g., update the src attribute of the clicked image)
+                imageModal.hide();
+            } else {
+                alert('Please enter a valid image URL.');
+            }
+        });
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
