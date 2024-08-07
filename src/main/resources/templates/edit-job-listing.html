@@ -2,29 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Job Listing</title>
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
-<!--    &lt;!&ndash; FontAwesome CSS &ndash;&gt;-->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">-->
-
-
-    <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
     <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="/lib/animate/animate.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
     <style>
         body{
@@ -54,34 +39,36 @@
     </style>
 </head>
 <body>
-<!-- Navigation Bar -->
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'client-job-listings'})}"></div>
-
 <div class="container">
     <h2 class="mb-4">Edit Job Listing</h2>
-    <form th:action="@{/client-job-listings/edit/{id}(id=${jobListingDTO.id})}" th:object="${jobListingDTO}" method="post">
+    <form th:action="@{/client-job-listings/edit/{id}(id=${jobListingEdit.id})}"
+          th:object="${jobListingEdit}"
+          method="post">
         <div class="form-group">
             <label for="title"><i class="fas fa-heading"></i> Title:</label>
-            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter job title" required>
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter job title" name="title" required>
+            <small th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="description"><i class="fas fa-align-left"></i> Description:</label>
-            <textarea id="description" th:field="*{description}" class="form-control" rows="5" placeholder="Enter job description" required></textarea>
+            <textarea id="description" th:field="*{description}" class="form-control" rows="5" placeholder="Enter job description" name="description" required></textarea>
+            <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="budget"><i class="fas fa-dollar-sign"></i> Budget:</label>
-            <input type="number" id="budget" th:field="*{budget}" class="form-control" placeholder="Enter budget" required>
+            <input type="number" id="budget" th:field="*{budget}" name="budget" class="form-control" placeholder="Enter budget" required>
+            <small th:if="${#fields.hasErrors('budget')}" th:errors="*{budget}" class="invalid-feedback text-danger"></small>
         </div>
         <div class="form-group">
             <label for="skillsRequired"><i class="fas fa-tools"></i> Skills Required:</label>
-            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" class="form-control" placeholder="Enter required skills" required>
+            <input type="text" id="skillsRequired" th:field="*{skillsRequired}" name="skillsRequired" class="form-control" placeholder="Enter required skills" required>
+            <small th:if="${#fields.hasErrors('skillsRequired')}" th:errors="*{skillsRequired}" class="invalid-feedback text-danger"></small>
         </div>
         <a href="/client-job-listings" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Job Listings</a>
         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
-
     </form>
 </div>
-<!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
