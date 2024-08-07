@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login - Freelancer Platform</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,8 +79,7 @@
     </style>
 </head>
 <body>
-
-
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'login'})}"></div>
 <div class="container">
     <div class="header">
         <img th:src="@{/images/SoftUni.png}" alt="Logo">
@@ -103,5 +104,9 @@
         <p><a th:href="@{/}" th:text="#{login_back_to_home}"></a></p>
     </div>
 </div>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.js"></script>
+<script src="/js/bootstrap.esm.js"></script>
+<script src="/js/bootstrap.js"></script>
 </body>
 </html>
