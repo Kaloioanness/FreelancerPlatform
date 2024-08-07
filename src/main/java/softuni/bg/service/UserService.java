@@ -149,4 +149,9 @@ public class UserService {
         }
         return Optional.empty();
     }
+
+    public void save(UserDTO loggedUser) {
+        UserEntity map = modelMapper.map(loggedUser, UserEntity.class);
+        userRepository.save(map);
+    }
 }
