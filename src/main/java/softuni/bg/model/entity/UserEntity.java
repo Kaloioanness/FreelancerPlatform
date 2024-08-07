@@ -49,10 +49,68 @@ public class UserEntity  extends BaseEntity {
     @OneToMany(mappedBy = "reviewee")
     private List<Review> reviewsReceived = new ArrayList<>();
 
+
+
+    // New fields for ratings
+    @Column(nullable = false)
+    private int totalRatingGiven = 0;
+
+    @Column(nullable = false)
+    private int totalRatingReceived = 0;
+
+    @Column(nullable = false)
+    private int numberOfReviewsGiven = 0;
+
+    @Column(nullable = false)
+    private int numberOfReviewsReceived = 0;
+
+
+    @Column(name = "image_url")
+    private String imageUrl; // profile pic
     public UserEntity   (){}
 
     // Getters and setters
 
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getTotalRatingGiven() {
+        return totalRatingGiven;
+    }
+
+    public void setTotalRatingGiven(int totalRatingGiven) {
+        this.totalRatingGiven = totalRatingGiven;
+    }
+
+    public int getTotalRatingReceived() {
+        return totalRatingReceived;
+    }
+
+    public void setTotalRatingReceived(int totalRatingReceived) {
+        this.totalRatingReceived = totalRatingReceived;
+    }
+
+    public int getNumberOfReviewsGiven() {
+        return numberOfReviewsGiven;
+    }
+
+    public void setNumberOfReviewsGiven(int numberOfReviewsGiven) {
+        this.numberOfReviewsGiven = numberOfReviewsGiven;
+    }
+
+    public int getNumberOfReviewsReceived() {
+        return numberOfReviewsReceived;
+    }
+
+    public void setNumberOfReviewsReceived(int numberOfReviewsReceived) {
+        this.numberOfReviewsReceived = numberOfReviewsReceived;
+    }
 
     public List<Role> getRoles() {
         return roles;
@@ -150,5 +208,12 @@ public class UserEntity  extends BaseEntity {
         this.email = email;
     }
 
+    public double getAverageRatingGiven() {
+        return numberOfReviewsGiven > 0 ? (double) totalRatingGiven / numberOfReviewsGiven : 0.0;
+    }
+
+    public double getAverageRatingReceived() {
+        return numberOfReviewsReceived > 0 ? (double) totalRatingReceived / numberOfReviewsReceived : 0.0;
+    }
 
 }
