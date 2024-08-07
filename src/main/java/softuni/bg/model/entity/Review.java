@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @Table(name = "reviews")
 public class Review extends BaseEntity {
 
-    @Column(columnDefinition = "TEXT")
-    private String comment;
     @Column(nullable = false)
     private int rating;
+    @Column(columnDefinition = "TEXT")
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "reviewer_id", nullable = false)
