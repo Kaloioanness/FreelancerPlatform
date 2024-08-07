@@ -9,7 +9,7 @@ import java.util.List;
 public interface JobListingService {
     JobListingDTO createJobListing(JobListingDTO jobListingDTO);
     void updateJobListing(Long id, JobListingDTO jobListingDTO, Long clientId);
-    JobListingInfoDTO getJobListingById(Long id);
+    JobListingDTO getJobListingById(Long id);
     List<JobListingInfoDTO> getAllJobListings();
 
     void deleteJobListing(Long id);
