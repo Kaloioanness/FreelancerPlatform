@@ -6,81 +6,80 @@
     <title>Review List</title>
     <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <!-- Bootstrap JavaScript Bundle -->
     <script src="/js/bootstrap.bundle.min.js"></script>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Template Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/img/review.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Nunito', 'Rubik', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container{
+            padding: 150px;
+        }
+    </style>
 </head>
 <body>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'reviews'})}"></div>
 <div class="container mt-4">
     <h2 class="mb-4">Review List</h2>
 
     <!-- List of Reviews -->
     <div class="card">
         <div class="card-body">
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
                 <tr>
-                    <th>ID</th>
+                    <th>Reviewee</th>
                     <th>Rating</th>
                     <th>Comment</th>
                     <th>Reviewer</th>
-                    <th>Reviewee</th>
-                    <th>Job Listing</th>
-                    <th>Actions</th>
+                    <th>Job Title</th>
                 </tr>
                 </thead>
                 <tbody>
                 <!-- Loop through reviews using Thymeleaf -->
-                <tr th:each="review : ${reviews}">
-                    <td th:text="${review.id}">1</td>
-                    <td th:text="${review.rating}">5</td>
-                    <td th:text="${review.comment}">Excellent work!</td>
-                    <td th:text="${review.reviewer}">John Doe</td>
-                    <td th:text="${review.reviewee}">Jane Smith</td>
-                    <td th:text="${review.jobListing}">Project XYZ</td>
+                <tr th:each="review : ${allReviews}">
+                    <td th:text="${review.reviewee.username}">Jane Smith</td>
                     <td>
-                        <a th:href="@{/api/reviews/{id}(id=${review.id})}" class="btn btn-sm btn-info mr-2">View</a>
-                        <a th:href="@{/api/reviews/{id}/edit(id=${review.id})}" class="btn btn-sm btn-warning mr-2">Edit</a>
-                        <a th:href="@{/api/reviews/{id}(id=${review.id})}" th:method="delete" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        <span th:each="i : ${#numbers.sequence(1, review.rating)}">
+                            <i class="fas fa-star text-warning"></i>
+                        </span>
+                        <span th:each="i : ${#numbers.sequence(review.rating + 1, 5)}">
+                            <i class="far fa-star text-warning"></i>
+                        </span>
                     </td>
+                    <td th:text="${review.comment}">Excellent work!</td>
+                    <td th:text="${review.reviewer.username}">John Doe</td>
+                    <td th:text="${review.contract.application.jobListing.title}">Project XYZ</td>
                 </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <!-- Create Review Form with Thymeleaf and Validation -->
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5 class="card-title">Create Review</h5>
-            <!-- Form with Thymeleaf validation attributes -->
-            <form th:action="@{/api/reviews}" method="post" th:object="${reviewDTO}">
-                <div class="form-group">
-                    <label for="rating">Rating:</label>
-                    <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" th:field="*{rating}" required>
-                    <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea class="form-control" id="comment" name="comment" rows="3" th:field="*{comment}" required></textarea>
-                    <span th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="reviewer">Reviewer:</label>
-                    <input type="text" class="form-control" id="reviewer" name="reviewer" th:field="*{reviewer}" required>
-                    <span th:if="${#fields.hasErrors('reviewer')}" th:errors="*{reviewer}" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="reviewee">Reviewee:</label>
-                    <input type="text" class="form-control" id="reviewee" name="reviewee" th:field="*{reviewee}" required>
-                    <span th:if="${#fields.hasErrors('reviewee')}" th:errors="*{reviewee}" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label for="jobListing">Job Listing:</label>
-                    <input type="text" class="form-control" id="jobListing" name="jobListing" th:field="*{jobListing}" required>
-                    <span th:if="${#fields.hasErrors('jobListing')}" th:errors="*{jobListing}" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
         </div>
     </div>
 
