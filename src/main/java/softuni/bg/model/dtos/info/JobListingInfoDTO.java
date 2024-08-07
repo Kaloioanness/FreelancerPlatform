@@ -1,5 +1,8 @@
 package softuni.bg.model.dtos.info;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import softuni.bg.model.entity.UserEntity;
 
 import java.math.BigDecimal;
@@ -7,9 +10,16 @@ import java.time.LocalDateTime;
 
 public class JobListingInfoDTO {
     private Long id;
+    @Size(min = 5,max = 40, message = "Title length must be between 5 and 40 characters!")
+    @NotNull
     private String title;
+    @Size(min = 10,max = 150, message = "Description length must be between 10 and 150 characters!")
+    @NotNull
     private String description;
+    @Positive(message = "Budget must be a positive number")
     private BigDecimal budget;
+    @Size(min = 5,max = 50, message = "Skills required length must be between 5 and 50 characters!")
+    @NotNull
     private String skillsRequired;
     private UserEntity client;
     private LocalDateTime datePosted;
