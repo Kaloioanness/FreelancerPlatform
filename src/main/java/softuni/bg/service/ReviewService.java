@@ -50,11 +50,6 @@ public class ReviewService {
         review.setComment(reviewDTO.getComment());
         review.setDateReviewed(reviewDTO.getDateReviewed());
 
-
-        Contract contract = contractRepository.findById(reviewDTO.getContract().getId())
-                .orElseThrow(() -> new RuntimeException("Contract not found"));
-        review.setContract(contract);
-
         UserEntity reviewer = userRepository.findById(reviewDTO.getReviewer().getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         review.setReviewer(reviewer);
@@ -62,8 +57,17 @@ public class ReviewService {
         UserEntity reviewee = userRepository.findById(reviewDTO.getReviewee().getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         review.setReviewee(reviewee);
-
+        review.setContract(reviewDTO.getContract());
         reviewRepository.save(review);
+
+        // Update ratings and review counts
+        reviewer.setTotalRatingGiven(reviewer.getTotalRatingGiven() + reviewDTO.getRating());
+        reviewer.setNumberOfReviewsGiven(reviewer.getNumberOfReviewsGiven() + 1);
+        userRepository.save(reviewer);
+
+        reviewee.setTotalRatingReceived(reviewee.getTotalRatingReceived() + reviewDTO.getRating());
+        reviewee.setNumberOfReviewsReceived(reviewee.getNumberOfReviewsReceived() + 1);
+        userRepository.save(reviewee);
     }
 
     public Optional<ReviewDTO> getReviewById(Long reviewId) {

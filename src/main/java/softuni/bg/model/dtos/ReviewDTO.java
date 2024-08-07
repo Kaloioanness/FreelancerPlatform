@@ -1,7 +1,7 @@
 package softuni.bg.model.dtos;
 
 import softuni.bg.model.entity.Contract;
-import softuni.bg.model.entity.JobListing;
+
 import softuni.bg.model.entity.UserEntity;
 
 import java.time.LocalDate;
@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class ReviewDTO {
 
     private Long id;
-    private String comment;
     private Integer rating;
+    private String comment;
     private UserEntity reviewer;
     private UserEntity reviewee;
     private Contract contract;
