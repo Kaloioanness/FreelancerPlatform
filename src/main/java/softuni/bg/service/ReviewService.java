@@ -28,6 +28,13 @@ public class ReviewService {
         this.contractRepository = contractRepository;
         this.userRepository = userRepository;
     }
+    public Optional<ReviewDTO> findById(Long id) {
+        return reviewRepository.findById(id).map(this::convertToDTO);
+    }
+    public void updateReview(ReviewDTO reviewDTO) {
+        Review reviewEntity = convertToEntity(reviewDTO);
+        reviewRepository.save(reviewEntity);
+    }
 
     public List<ReviewDTO> findByReviewer(UserEntity reviewer) {
         List<Review> reviews = reviewRepository.findByReviewer(reviewer);
@@ -81,7 +88,9 @@ public class ReviewService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+    public boolean hasAlreadyReviewed(Long contractId, Long reviewerId) {
+        return reviewRepository.existsByContractIdAndReviewerId(contractId, reviewerId);
+    }
 
     public void deleteReview(Long reviewId) {
         reviewRepository.deleteById(reviewId);
