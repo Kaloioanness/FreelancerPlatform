@@ -65,8 +65,8 @@
     <div class="profile-header text-center">
         <img th:src="${loggedUser.imageUrl != null ? loggedUser.imageUrl : 'https://via.placeholder.com/120'}" alt="Profile Picture" class="img-fluid rounded-circle" data-bs-toggle="modal" data-bs-target="#updatePictureModal">
         <h2 th:text="${loggedUser.firstName} + ' ' + ${loggedUser.lastName}">User Name</h2>
-        <p th:text="${loggedUser.username}">username</p>
-        <p th:text="${loggedUser.email}">email@example.com</p>
+        <p th:text="'username: ' + ${loggedUser.username}">username</p>
+        <p th:text="'email:  ' + ${loggedUser.email}">email@example.com</p>
     </div>
 
     <!-- Ratings Section -->
@@ -77,17 +77,19 @@
                 <p class="card-text">
                     <strong>Average Rating Given:</strong>
                     <span th:utext="${thymeleafUtility.getStarRating(loggedUser.averageRatingGiven)}" class="rating-stars"></span>
-                    <span th:text="${#numbers.formatDecimal(loggedUser.averageRatingGiven, 1, 2)}"></span>
+                    <span th:text="${#numbers.formatDecimal(loggedUser.averageRatingGiven, 1, 2)} + ' from ' + ${loggedUser.getNumberOfReviewsGiven()} + ' reviews'"></span>
                 </p>
             </div>
+
             <div class="col-md-6">
                 <p class="card-text">
                     <strong>Average Rating Received:</strong>
                     <span th:utext="${thymeleafUtility.getStarRating(loggedUser.averageRatingReceived)}" class="rating-stars"></span>
-                    <span th:text="${#numbers.formatDecimal(loggedUser.averageRatingReceived, 1, 2)}"></span>
+                    <span th:text="${#numbers.formatDecimal(loggedUser.averageRatingReceived, 1, 2)} + ' from ' + ${loggedUser.getNumberOfReviewsReceived()} + ' reviews'"></span>
                 </p>
             </div>
         </div>
+
     </div>
 </div>
 
