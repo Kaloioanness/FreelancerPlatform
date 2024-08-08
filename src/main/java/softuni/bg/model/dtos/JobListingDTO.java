@@ -4,6 +4,7 @@ package softuni.bg.model.dtos;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import softuni.bg.model.entity.UserEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,6 +27,15 @@ public class JobListingDTO {
     private LocalDateTime datePosted;
 
     //Getters and setters
+
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
 
     public Long getId() {
         return id;
@@ -67,13 +77,7 @@ public class JobListingDTO {
         this.skillsRequired = skillsRequired;
     }
 
-    public Long getClientId() {
-        return clientId;
-    }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
-    }
 
     public LocalDateTime getDatePosted() {
         return datePosted;
