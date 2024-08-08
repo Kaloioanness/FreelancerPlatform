@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static GrantedAuthority map(RoleName role) {
         return new SimpleGrantedAuthority(
-                "ROLE_" + role
+                "ROLE_" + role.name()
         );
     }
 }
