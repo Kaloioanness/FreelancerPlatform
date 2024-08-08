@@ -24,7 +24,10 @@ public class SecurityConfiguration {
                                        // All static resources to "common locations" (css, images, js)
                                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                        // some more resources for all users
+                                       .requestMatchers("/job-listings").hasRole("FREELANCER")
+                                       .requestMatchers("/applications/freelancer").hasRole("FREELANCER")
                                        .requestMatchers("/","/users/login","/users/register","/home", "/error").permitAll()
+                                       .requestMatchers("/client-job-listings").hasRole("CLIENT")
                                        // all other resources should be authenticated
                                        .anyRequest()
                                        .authenticated()
