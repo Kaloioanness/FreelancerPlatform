@@ -27,12 +27,12 @@ public class EditJobListingController {
     }
 
     @ModelAttribute("jobListingEdit")
-    public JobListingDTO jobListingDTO(){
-        return new JobListingDTO();
+    public JobListingInfoDTO jobListingDTO(){
+        return new JobListingInfoDTO();
     }
     @GetMapping("/edit/{id}")
     public String showEditJobListingForm(@PathVariable Long id, Model model) {
-        JobListingDTO jobListing = jobListingService.getJobListingById(id);
+        JobListingInfoDTO jobListing = jobListingService.getJobListingById(id);
         model.addAttribute("jobListingEdit", jobListing);
         return "edit-job-listing";
     }

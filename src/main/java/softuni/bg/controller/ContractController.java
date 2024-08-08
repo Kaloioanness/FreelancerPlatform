@@ -1,16 +1,12 @@
 package softuni.bg.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import softuni.bg.model.dtos.ContractDTO;
 import softuni.bg.model.dtos.UserDTO;
 import softuni.bg.model.dtos.info.ContractInfoDTO;
-import softuni.bg.model.entity.UserEntity;
-import softuni.bg.model.enums.ContractStatus;
 import softuni.bg.service.ContractService;
 import softuni.bg.service.UserService;
 
@@ -29,7 +25,7 @@ public class ContractController {
 
     @GetMapping("/{contractId}")
     public String viewContractDetails(@PathVariable Long contractId, Model model) {
-        ContractDTO contractDTO = contractService.findById(contractId)
+        ContractInfoDTO contractDTO = contractService.findById(contractId)
                 .orElseThrow(() -> new RuntimeException("Contract not found"));
         model.addAttribute("contract", contractDTO);
         return "contract-details";
@@ -46,9 +42,9 @@ public class ContractController {
 
     @GetMapping("/edit/{contractId}")
     public String showEditContractForm(@PathVariable Long contractId, Model model) {
-        ContractDTO contractDTO = contractService.findById(contractId)
+        ContractInfoDTO ContractInfoDTO = contractService.findById(contractId)
                 .orElseThrow(() -> new RuntimeException("Contract not found"));
-        model.addAttribute("contractDTO", contractDTO);
+        model.addAttribute("contractDTO", ContractInfoDTO);
         return "edit-contract";
     }
 
@@ -58,29 +54,18 @@ public class ContractController {
         return "redirect:/contracts/list";
     }
 
+    @Transactional
     @GetMapping
-    public String findByFreelancer( Principal principal, Model model) { //@RequestParam
+    public String showUserContracts(Principal principal, Model model) {
         UserDTO userByUsername = userService.findUserByUsername(principal.getName());
         Long id = userByUsername.getId();
-        UserEntity freelancer = userService.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
-        List<ContractInfoDTO> myContract = contractService.findByFreelancer(freelancer);
-        model.addAttribute("myContract", myContract);
+        List<ContractInfoDTO> myContracts = userService.getUserContracts(id);
+
+        model.addAttribute("myContracts", myContracts);
         return "contracts";
     }
-
-    @GetMapping("/client")
-    public String findByClient(@RequestParam Long clientId, Model model) {
-        UserEntity client = userService.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("User with id " + clientId + " not found"));
-        List<ContractDTO> contracts = contractService.findByClient(client);
-        model.addAttribute("contracts", contracts);
-        return "contracts";
-    }
-
-
     @PostMapping("/create")
-    public String createContract(@RequestParam("applicationId") Long applicationId, Model model) {
+    public String createContract(@RequestParam("applicationId") Long applicationId) {
         // Create contract logic
         contractService.createContract(applicationId);
 
@@ -89,3 +74,13 @@ public class ContractController {
     }
 
 }
+//        UserEntity currentUser = userService.findById(id)
+//                .orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+//        List<Contract> myContracts = new ArrayList<>();
+//        List<Contract> clientContracts = currentUser.getClientContracts();
+//        List<Contract> freelancerContracts = currentUser.getFreelancerContracts();
+//        if (clientContracts.isEmpty()){
+//            myContracts.addAll(freelancerContracts);
+//        }else {
+//            myContracts.addAll(clientContracts);
+//        }
