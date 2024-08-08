@@ -52,15 +52,17 @@
             <th>Freelancer</th>
             <th>Status</th>
             <th>Terms</th>
+            <th>Job Title</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="contract : ${myContract}">
-            <td th:text="${contract.client.getUsername()}">Client</td>
+        <tr th:each="contract : ${myContracts}">
+            <td th:text="${contract.client.username}">Client</td>
             <td th:text="${contract.freelancer.username}">Freelancer</td>
             <td th:text="${contract.status}">Status</td>
             <td th:text="${contract.terms}">Terms</td>
+            <td th:text="${contract.application.jobListing.title}">Job Title</td>
             <td>
                 <a th:href="@{/reviews/create(contractId=${contract.getId()})}" class="btn btn-warning btn-sm">Create Review</a>
                 <form th:action="@{/contracts/delete/{id}(id=${contract.id})}" method="post" class="d-inline">
