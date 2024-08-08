@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import softuni.bg.model.dtos.ReviewDTO;
+import softuni.bg.model.dtos.UserDTO;
 import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.UserEntity;
 import softuni.bg.service.ContractService;
@@ -18,6 +20,7 @@ import softuni.bg.service.impl.JobListingServiceImpl;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/reviews")
@@ -48,27 +51,51 @@ public class ReviewController {
         model.addAttribute("allReviews", allReviews);
         return "review-list";
     }
-
-//    @PostMapping
-//    public String createReview(@ModelAttribute("reviewDTO") @Valid ReviewDTO reviewDTO, BindingResult bindingResult, Model model) {
-//        if (bindingResult.hasErrors()) {
-//            List<ReviewDTO> reviews = reviewService.findAllReviews();
-//            model.addAttribute("reviews", reviews);
-//            return "review-list"; // Return to the same page with validation errors
-//        }
-//
-////        ReviewDTO createdReview = reviewService.createReview(reviewDTO);
-//        return "redirect:/reviews"; // Redirect to the review list page after successful creation
-//    }
-
-
-
-    @DeleteMapping("/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-        reviewService.deleteReview(reviewId);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/my-reviews")
+    public String getMyReviews(Principal principal,Model model) {
+        UserDTO userByUsername = userService.findUserByUsername(principal.getName());
+        Optional<UserEntity> byId = userService.findById(userByUsername.getId());
+        if (byId.isEmpty()){
+            return "review-list";
+        }
+        List<ReviewDTO> myReviews = reviewService.findByReviewer(byId.get());
+        model.addAttribute("myReviews", myReviews);
+        return "my-reviews";
     }
+    @PostMapping("my-reviews/delete/{id}")
+    public String deleteReview(@PathVariable Long id) {
+        reviewService.deleteReview(id);
+        return "redirect:/reviews/my-reviews";
+    }
+    @GetMapping("/my-reviews/edit/{id}")
+    public String showEditReviewForm(@PathVariable("id") Long reviewId, Principal principal, Model model) {
+        ReviewDTO reviewDTO = reviewService.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
 
+        Long userId = userService.findUserByUsername(principal.getName()).getId();
+
+        if (reviewDTO.getReviewer().getId() != userId) {
+            return "redirect:/access-denied";
+        }
+
+        model.addAttribute("reviewDTO", reviewDTO);
+        return "edit-review";
+    }
+    @PostMapping("/my-reviews/edit/{id}")
+    public String updateReview(@PathVariable("id") Long reviewId,
+                               @ModelAttribute("reviewDTO") ReviewDTO reviewDTO) {
+        ReviewDTO existingReview = reviewService.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Review not found"));
+
+        // Update the existing review
+        existingReview.setRating(reviewDTO.getRating());
+        existingReview.setComment(reviewDTO.getComment());
+        existingReview.setDateReviewed(LocalDate.now());
+
+        reviewService.updateReview(existingReview);
+
+        return "redirect:/reviews/my-reviews";
+    }
     @GetMapping("/reviewer")
     public String findByReviewer(@RequestParam Long reviewerId, Model model) {
         UserEntity reviewer = userService.findById(reviewerId)
@@ -85,20 +112,25 @@ public class ReviewController {
                 .orElseThrow(() -> new RuntimeException("User with id " + revieweeId + " not found"));
         List<ReviewDTO> reviews = reviewService.findByReviewee(reviewee);
         model.addAttribute("reviews", reviews);
-        model.addAttribute("reviewDTO", new ReviewDTO()); // Add an empty ReviewDTO for the form
+        model.addAttribute("reviewDTO", new ReviewDTO());
         return "review-list";
     }
 
 
     @GetMapping("/create")
-    public String showCreateReviewForm(@RequestParam("contractId") Long contractId, Principal principal, Model model) {
+    public String showCreateReviewForm(@RequestParam("contractId") Long contractId, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+        Long reviewerId = userService.findUserByUsername(principal.getName()).getId();
+
+        if (reviewService.hasAlreadyReviewed(contractId, reviewerId)) {
+            redirectAttributes.addFlashAttribute("error", "You have already reviewed this contract.");
+            return "redirect:/reviews";
+        }
+
         ReviewDTO reviewDTO = new ReviewDTO();
         Contract contract = contractService.getContractById(contractId);
         reviewDTO.setContract(contract);
 
-        // Set reviewer and reviewee based on your logic
-        Long id = userService.findUserByUsername(principal.getName()).getId();
-        UserEntity loggedUser = userService.findById(id).orElseThrow(() -> new RuntimeException("Logged in user not found"));
+        UserEntity loggedUser = userService.findById(reviewerId).orElseThrow(() -> new RuntimeException("Logged in user not found"));
         reviewDTO.setReviewer(loggedUser);
         reviewDTO.setReviewee(contractService.returnOtherUser(contract, loggedUser));
 
@@ -107,7 +139,16 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
-    public String createReview(@RequestParam("contractId") Long contractId, @ModelAttribute("reviewDTO") ReviewDTO reviewDTO) {
+    public String createReview(@RequestParam("contractId") Long contractId, @ModelAttribute("reviewDTO") ReviewDTO reviewDTO,
+                               RedirectAttributes redirectAttributes) {
+        // Check if the review already exists
+        Long reviewerId = reviewDTO.getReviewer().getId();
+        if (reviewService.hasAlreadyReviewed(contractId, reviewerId)) {
+            redirectAttributes.addFlashAttribute("error", "You have already reviewed this contract.");
+            return "redirect:/reviews";
+        }
+
+        // Proceed with review creation
         reviewDTO.setContract(contractService.getContractById(contractId));
         reviewDTO.setDateReviewed(LocalDate.now());
         reviewService.createReview(reviewDTO);
