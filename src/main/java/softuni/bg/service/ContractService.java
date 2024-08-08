@@ -41,9 +41,9 @@ public class ContractService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<ContractDTO> findById(Long id) {
+    public Optional<ContractInfoDTO> findById(Long id) {
         Optional<Contract> contractOptional = contractRepository.findById(id);
-        return contractOptional.map(this::convertToDTO);
+        return contractOptional.map(this::convertToInfoDTO);
     }
     public Contract getContractById(Long id){
         return contractRepository.findById(id).get();
@@ -58,7 +58,7 @@ public class ContractService {
         List<Contract> contracts = contractRepository.findByClient(client);
         return contracts.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public void deleteContract(Long contractId) {
@@ -75,6 +75,7 @@ public class ContractService {
     private ContractDTO convertToDTO(Contract contract) {
         return modelMapper.map(contract, ContractDTO.class);
     }
+
     private ContractInfoDTO convertToInfoDTO(Contract contract) {
         return modelMapper.map(contract, ContractInfoDTO.class);
     }
