@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Edit Review</h2>
+    <form th:action="@{/reviews/my-reviews/edit/{id}(id=${reviewDTO.id})}" th:object="${reviewDTO}" method="post">
+        <div class="form-group">
+            <label for="rating">Rating</label>
+            <input type="number" id="rating" th:field="*{rating}" class="form-control" min="1" max="5" required>
+        </div>
+        <div class="form-group">
+            <label for="comment">Comment</label>
+            <textarea id="comment" th:field="*{comment}" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="reviewerUsername">Reviewer</label>
+            <input type="text" id="reviewerUsername" th:value="*{reviewer.username}" class="form-control" readonly>
+            <input type="hidden" th:field="*{reviewer.id}" />
+        </div>
+        <div class="form-group">
+            <label for="revieweeUsername">Reviewee</label>
+            <input type="text" id="revieweeUsername" th:value="*{reviewee.username}" class="form-control" readonly>
+            <input type="hidden" th:field="*{reviewee.id}" />
+        </div>
+        <div class="form-group">
+            <label for="contractId">Contract</label>
+            <input type="hidden" id="contractId" th:field="*{contract.id}" class="form-control">
+            <input type="hidden" name="contractId" th:value="*{contract.id}" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Review</button>
+        <a th:href="@{/reviews/my-reviews}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
