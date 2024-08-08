@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reviews</title>
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/img/review.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Nunito', 'Rubik', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            padding: 150px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'my-reviews'})}"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Reviews</h2>
+
+    <!-- List of My Reviews -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Rating</th>
+                    <th>Job Title</th>
+                    <th>Reviewee</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Loop through user's reviews using Thymeleaf -->
+                <tr th:each="review : ${myReviews}">
+                    <td>
+                        <!-- Filled stars -->
+                        <span th:each="i : ${#numbers.sequence(1, review.getRating())}">
+                             <i class="fas fa-star text-warning"></i> </span>
+
+                        <!-- Empty stars (only if rating is less than 5) -->
+                        <span th:if="${review.getRating() < 5}" th:each="i : ${#numbers.sequence(review.getRating() + 1, 5)}">
+                            <i class="far fa-star text-warning"></i> </span>
+                    </td>
+                    <td th:text="${review.contract.application.jobListing.title}">Project XYZ</td>
+                    <td th:text="${review.reviewee.username}">Jane Smith</td>
+                    <td th:text="${review.comment}">Excellent work!</td>
+                    <td>
+                        <a th:href="@{'/reviews/my-reviews/edit/' + ${review.id}}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form th:action="@{'/reviews/my-reviews/delete/' + ${review.id}}" method="post" style="display:inline;">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript Bundle -->
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
