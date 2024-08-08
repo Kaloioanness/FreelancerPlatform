@@ -86,19 +86,19 @@
                        th:text="#{nav_bar_home}"
                     >Home </a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="hasRole('CLIENT')">
                     <a class="nav-link" href="/client-job-listings"
                        th:classappend="${activeLink == 'client-job-listings'}? 'active'"
                        th:text="#{nav_bar_client_job_listings}"
                     >My Job Listings</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="hasAnyRole('FREELANCER')">
                     <a class="nav-link" href="/job-listings"
                        th:classappend="${activeLink == 'job-listings'}? 'active'"
                        th:text="#{nav_bar_job_listings}"
                     >Job Listings</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="hasAnyRole('FREELANCER')">
                     <a class="nav-link" href="/applications/freelancer"
                        th:classappend="${activeLink == 'freelancer'}? 'active'"
                        th:text="#{nav_bar_applications}"
@@ -122,7 +122,12 @@
                        th:text="#{nav_bar_reviews}"
                     >Reviews</a>
                 </li>
-
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/reviews/my-reviews"
+                       th:classappend="${activeLink == 'my-reviews'}? 'active'"
+                       th:text="#{nav_bar_my_reviews}"
+                    >Reviews</a>
+                </li>
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <div class="form-inline my-0 my-lg-0 border px-0">
                         <div class="logged-user"></div>
