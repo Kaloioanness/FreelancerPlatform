@@ -141,7 +141,7 @@
     </div>
     <div class="card" th:each="jobs : ${clientJobListings}">
         <div class="card-body">
-            <h5 th:text="${jobs.title}">Job Title</h5>
+            <h5 th:text="${jobs.getTitle()}">Job Title</h5>
             <p><strong>Description:</strong> <span th:text="${jobs.description}">Java, MySQL, etc.</span></p>
             <p><strong>Budget:</strong> <span class="budget-value" th:text="${jobs.budget}">$1000</span></p>
             <p><strong>Skills Required:</strong> <span th:text="${jobs.skillsRequired}">Java, MySQL, etc.</span></p>
