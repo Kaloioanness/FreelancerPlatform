@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import softuni.bg.model.FreelanceUserDetails;
 import softuni.bg.model.dtos.*;
+import softuni.bg.model.dtos.info.ContractInfoDTO;
 import softuni.bg.model.entity.Contract;
 import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.Role;
@@ -34,32 +35,16 @@ public class UserService {
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
-    public List<JobListingDTO> getUserJobListings(Long userId) {
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        List<JobListing> jobListings = userEntity.getJobListings();
 
-        return jobListings.stream()
-                .map(jobListing -> modelMapper.map(jobListing, JobListingDTO.class))
-                .collect(Collectors.toList());
-    }
-//    public List<ApplicationDTO> getUserApplications(Long userId) {
-//        UserEntity userEntity = userRepository.findById(userId)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//
-//        return userEntity.getUserApplications().stream()
-//                .map(application -> modelMapper.map(application, ApplicationDTO.class))
-//                .collect(Collectors.toList());
-//    }
-    public List<ContractDTO> getUserContracts(Long userId) {
+    public List<ContractInfoDTO> getUserContracts(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         List<Contract> contracts = new ArrayList<>();
         contracts.addAll(userEntity.getFreelancerContracts());
         contracts.addAll(userEntity.getClientContracts());
         return contracts.stream()
-                .map(contract -> modelMapper.map(contract, ContractDTO.class))
+                .map(contract -> modelMapper.map(contract, ContractInfoDTO.class))
                 .collect(Collectors.toList());
     }
     @Transactional
@@ -80,16 +65,6 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public void assignRoleToUser(Long userId, RoleName roleName) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        user.getRoles().add(role);
-        userRepository.save(user);
-    }
 
     public Optional<UserEntity> findById(Long userId) {
         return userRepository.findById(userId);
@@ -141,17 +116,29 @@ public class UserService {
         }
     }
 
-    public Optional<FreelanceUserDetails> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null &&
-                authentication.getPrincipal() instanceof FreelanceUserDetails freelanceUserDetails) {
-            return Optional.of(freelanceUserDetails);
-        }
-        return Optional.empty();
-    }
-
     public void save(UserDTO loggedUser) {
         UserEntity map = modelMapper.map(loggedUser, UserEntity.class);
         userRepository.save(map);
     }
+
+
+//    public List<JobListingDTO> getUserJobListings(Long userId) {
+//        UserEntity userEntity = userRepository.findById(userId)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+//
+//        List<JobListing> jobListings = userEntity.getJobListings();
+//
+//        return jobListings.stream()
+//                .map(jobListing -> modelMapper.map(jobListing, JobListingDTO.class))
+//                .collect(Collectors.toList());
+//    }
+
+//    public Optional<FreelanceUserDetails> getCurrentUser() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null &&
+//                authentication.getPrincipal() instanceof FreelanceUserDetails freelanceUserDetails) {
+//            return Optional.of(freelanceUserDetails);
+//        }
+//        return Optional.empty();
+//    }
 }
