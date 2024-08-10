@@ -1,21 +1,16 @@
 package softuni.bg.service;
 
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import softuni.bg.model.dtos.ContractDTO;
 import softuni.bg.model.dtos.info.ContractInfoDTO;
 import softuni.bg.model.entity.Application;
 import softuni.bg.model.entity.Contract;
-import softuni.bg.model.entity.JobListing;
 import softuni.bg.model.entity.UserEntity;
-import softuni.bg.model.enums.ContractStatus;
 import softuni.bg.repository.ApplicationRepository;
 import softuni.bg.repository.ContractRepository;
 import softuni.bg.repository.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
