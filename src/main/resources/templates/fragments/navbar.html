@@ -66,19 +66,13 @@
                        th:text="#{nav_bar_profile}"
                     >Profile</a>
                 </li>
-
-                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Admin
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/">Action</a>
-                        <a class="dropdown-item" href="/">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/">Something else here</a>
-                    </div>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/users"
+                       th:classappend="${activeLink == 'ADMIN'}? 'active'"
+                       th:text="#{nav_bar_admin}"
+                    >My Job Listings</a>
                 </li>
+
 
                 <li class="nav-item active">
                     <a class="nav-link" href="/"

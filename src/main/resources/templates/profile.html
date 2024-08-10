@@ -67,6 +67,9 @@
         <h2 th:text="${loggedUser.firstName} + ' ' + ${loggedUser.lastName}">User Name</h2>
         <p th:text="'username: ' + ${loggedUser.username}">username</p>
         <p th:text="'email:  ' + ${loggedUser.email}">email@example.com</p>
+        <p th:text="'role:  ' + ${loggedUser.getRoles().first}">email@example.com</p>
+
+
     </div>
 
     <!-- Ratings Section -->
