@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("registerDTO") UserRegistrationDTO registerDTO, BindingResult bindingResult, RedirectAttributes rda, Model model) {
+    public String register(@Valid @ModelAttribute("registerDTO") UserRegistrationDTO registerDTO, BindingResult bindingResult, RedirectAttributes rda) {
         if (bindingResult.hasErrors() || !registerDTO.getPassword().equals(registerDTO.getConfirmPassword())) {
             rda.addFlashAttribute("registerDTO", registerDTO);
             rda.addFlashAttribute("org.springframework.validation.BindingResult.registerDTO", bindingResult);
@@ -47,20 +47,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/{userId}")
-    public String getUserById(@PathVariable Long userId, Model model) {
-        Optional<UserDTO> userDTO = userService.findById(userId)
-                .map(userEntity -> userService.convertToDTO(userEntity));
-
-        if (userDTO.isPresent()) {
-            model.addAttribute("user", userDTO.get());
-            return "user-details"; // Return user details view
-        } else {
-            model.addAttribute("error", "User not found");
-            return "error"; // Return error view
-        }
-    }
-
     @GetMapping
     public String getAllUsers(Model model) {
         List<UserDTO> users = userService.findAllUsers();
@@ -68,11 +54,30 @@ public class UserController {
         return "users-list"; // Return the view that lists all users
     }
 
-    @PutMapping("/{userId}")
-    public String updateUser(@PathVariable Long userId, @ModelAttribute("user") @Valid UserDTO userDTO, BindingResult result, Model model) {
+    @GetMapping("/{userId}")
+    public String getUserById(@PathVariable Long userId, Model model) {
+        UserDTO userDTO = userService.findById(userId)
+                .map(userService::convertToDTO)
+                .orElse(null);
+
+        if (userDTO != null) {
+            model.addAttribute("user", userDTO);
+            return "user-details";
+        } else {
+            model.addAttribute("error", "User not found");
+            return "error";
+        }
+    }
+    @PostMapping("/{userId}/update")
+    public String updateUser(@PathVariable Long userId,
+                             @ModelAttribute("user") @Valid UserDTO userDTO,
+                             BindingResult result,
+                             Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("org.springframework.validation.BindingResult.user", result);
             return "user-details";
         }
+
         try {
             UserDTO updatedUser = userService.updateUser(userId, userDTO);
             model.addAttribute("user", updatedUser);
@@ -80,17 +85,20 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "error";
+        } catch (Exception e) {
+            model.addAttribute("error", "An unexpected error occurred while updating the user.");
+            return "error";
         }
     }
 
-    @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable Long userId, Model model) {
+    @PostMapping("/delete/{id}")
+    public String deleteUser(@PathVariable Long id, Model model) {
         try {
-            userService.deleteUser(userId);
-            return "redirect:/users"; // Redirect to the users list after deletion
+            userService.deleteUser(id);
+            return "redirect:/users";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "error"; // Return error view
+            return "error";
         }
     }
 }
