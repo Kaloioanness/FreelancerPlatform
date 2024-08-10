@@ -31,6 +31,7 @@ public class ProfileController {
     public String showProfilePage(Principal principal, Model model) {
 
         UserDTO loggedUser = userService.findUserByUsername(principal.getName());
+
         model.addAttribute("loggedUser", loggedUser);
         model.addAttribute("thymeleafUtility", thymeleafUtility);
         return "profile";
