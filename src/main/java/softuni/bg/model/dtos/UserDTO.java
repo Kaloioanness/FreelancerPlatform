@@ -20,8 +20,10 @@ public class UserDTO {
     private int numberOfReviewsGiven;
     private int numberOfReviewsReceived;
 
+    public UserDTO(){}
 
     // Getters and setters
+
     public String getImageUrl() {
         return imageUrl;
     }
