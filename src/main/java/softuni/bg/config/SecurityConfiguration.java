@@ -28,6 +28,7 @@ public class SecurityConfiguration {
                                        .requestMatchers("/applications/freelancer").hasRole("FREELANCER")
                                        .requestMatchers("/","/users/login","/users/register","/home", "/error").permitAll()
                                        .requestMatchers("/client-job-listings").hasRole("CLIENT")
+                                       .requestMatchers("/users").hasRole("ADMIN")
                                        // all other resources should be authenticated
                                        .anyRequest()
                                        .authenticated()
